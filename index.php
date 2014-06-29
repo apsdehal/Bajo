@@ -1,5 +1,7 @@
 <?php
 
-$routes = array();
+$routes = array(
+	'/' => 'HomeController'
+	);
 
 Link::all( $routes );
