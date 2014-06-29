@@ -1,6 +1,7 @@
 #Bajo
 
-Bajo is a python bot written under Google Summer of Code 2014 program by apsdehal to perform Wikidata synce related tasks of editing and creating pages by adding annotations to them. It acts on push to wikidata button of annotation tool (which is the main aim).
+Bajo is a helper app for GSoC project created by Amanpreet Singh (apsdehal) with WikiMedia foundation. It feeds annotation made by a user to Wikidata in the name of him/her by verifying his identity on WikiMedia. It will greatly rely on tools made by Magnus Manske.
 
 #Dependencies
+- Link Router
  
