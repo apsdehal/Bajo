@@ -1,6 +1,6 @@
 {
  "require": {
-    "link/link": "dev-master"	
+    "link/link": "v1.2"	
   },
   "autoload": {
     "classmap": [
