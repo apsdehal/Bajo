@@ -23,20 +23,20 @@ var Bajo = {
 		if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
 			h += "<div><a title='You need to authorise WiDaR to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/widar/index.php?action=authorize'>WiDaR</a><br/>not authorised.</div>" ;
 		} else {
-			h += "<div>Logged into <a title='WiDaR authorised' target='_blank' href='/widar/'>WiDaR</a> as " + d.result.query.userinfo.name + "</div>" ;
+			h += "<div>Logged into <a title='WiDaR authorised' target='_blank' href='/widar/'>WiDaR</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 			$.each ( d.result.query.userinfo.groups , function ( k , v ) {
 				if ( v != 'bot' ) return ;
 				h += "<div><b>You are a bot</b>, no throttling for you!</div>" ;
 			} ) ;
+			window.clearTimeout(self.oauthTimeout);
 		}
-		$('#oauth_status').html ( h ) ;
-		$('#oauth_status a').tooltip({placement:'left'}) ;
-		$.each ( (((((d||{}).result||{}).query||{}).userinfo||{}).groups||[]) , function ( k , v ) {
-			if ( v == 'bot' ) {
-				max_widar_concurrent = 5 ;
-				widar_edit_delay = 1 ;
-			}
-		} ) ;
+		$('.oauth_status').html ( h ) ;
+		// $.each ( (((((d||{}).result||{}).query||{}).userinfo||{}).groups||[]) , function ( k , v ) {
+		// 	if ( v == 'bot' ) {
+		// 		max_widar_concurrent = 5 ;
+		// 		widar_edit_delay = 1 ;
+		// 	}
+		// } ) ;
 	} ) ;
 }
 
@@ -49,3 +49,5 @@ Bajo.setConfig();
 $(".login button").click( function(){
 	$(this).html('Loading ...');
 })	
+
+Bajo.oauthTimeout = window.setTimeout(Bajo.checkOauthStatus, 1000);

@@ -30,3 +30,13 @@
 .login button:hover{
 	background-color: #6dc97e;
 }
+
+.oauth_status{
+	position: absolute;
+	left: 32%;
+	top: 30%;
+	font-size: 18px;
+}
+.oauth_status .username{
+	color: #5cb85c;
+}
