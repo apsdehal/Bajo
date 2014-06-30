@@ -1,3 +1,4 @@
 {
-	"wider_api": "'/widar/index.php?callback=?'"
+	"wider_api": "/widar/index.php?callback=?",
+	"environment":"development"
 }

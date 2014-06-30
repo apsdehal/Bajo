@@ -3,6 +3,6 @@
 class View{
 
   public static function make( $view ){
-    require_once("./views/" .  $view . '.php');
+    require_once("./app/views/" .  $view . '.php');
   }
 }
