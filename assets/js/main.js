@@ -18,7 +18,6 @@ var Bajo = {
 	},
 	checkOauthStatus: function () {
 		var self = this;
-		console.log('hi');	
 		$.getJSON ( self.config.api_root , {
 			action:'get_rights',
 			botmode:1

@@ -1,7 +1,6 @@
 .info{
-	position: absolute;
-	top: 10%;
-	left: 20%;
+	position: relative;
+	top: 50px;
 	margin: 0 auto;
 	text-align: center;
 	font-size: 24px;
@@ -10,9 +9,9 @@
 }
 
 .login{
-	position: absolute;
-	top: 20%;
-	left: 35%;
+	position: relative;
+	top: 70px;
+	left: 38%;
 	width: 240px;
 	margin: 0 auto;
 	margin-top: 10px;
@@ -32,9 +31,9 @@
 }
 
 .oauth_status{
-	position: absolute;
-	left: 34%;
-	top: 35%;
+	position: relative;
+	left: 37%;
+	top: 90px;
 	font-size: 18px;
 }
 .oauth_status .username{
