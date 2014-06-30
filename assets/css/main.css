@@ -1,0 +1,28 @@
+.info{
+	position: absolute;
+	top: 10%;
+	left: 20%;
+	margin: 0 auto;
+	text-align: center;
+	font-size: 24px;
+	font-weight: 500;
+	font-family: sans-serif;
+}
+
+.login{
+	position: absolute;
+	top: 20%;
+	left: 35%;
+	width: 240px;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+.login button{
+	font-size: 20px;
+	height: 40px;
+	border-radius: 3px;
+	color: #fff;
+	background-color: #5cb85c;
+	border-color: #4cae4c;
+	padding:5px 20px;
+}
