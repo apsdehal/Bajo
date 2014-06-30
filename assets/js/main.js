@@ -13,10 +13,12 @@ var Bajo = {
 	 *	Helper for setting the config variable, gets config,json and sets it to config
 	 */	
 	setConfig: function(){
-		this.oauthTimeout = window.setTimeout(self.checkOauthStatus, 1000);
+		var self = this;
+		self.oauthTimeout = window.setTimeout(self.checkOauthStatus, 1000);
 	},
 	checkOauthStatus: function () {
-		var self = this;	
+		var self = this;
+		console.log('hi');	
 		$.getJSON ( self.config.api_root , {
 			action:'get_rights',
 			botmode:1
@@ -41,8 +43,8 @@ var Bajo = {
 			// 		widar_edit_delay = 1 ;
 			// 	}
 			// } ) ;
-	});
-}
+		});
+	}
 
 }
 
