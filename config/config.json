@@ -1,4 +1,4 @@
 {
-	"api_root": "http://tools.wmflabs.org/wikidata-annotation-feeder/",
+	"api_root": "http://tools.wmflabs.org/widar",
 	"environment":"development"
 }

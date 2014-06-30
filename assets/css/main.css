@@ -20,9 +20,13 @@
 .login button{
 	font-size: 20px;
 	height: 40px;
-	border-radius: 3px;
+	border-radius: 4px;
 	color: #fff;
 	background-color: #5cb85c;
 	border-color: #4cae4c;
 	padding:5px 20px;
+}
+
+.login button:hover{
+	background-color: #6dc97e;
 }
