@@ -3,7 +3,7 @@
 require("config/bootstrap.php");
 
 $routes = array(
-	'/' => 'HomeController'
+	'/bajo' => 'HomeController'
 	);
 
 Toro::serve( $routes );
