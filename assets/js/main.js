@@ -25,5 +25,9 @@ var Bajo = {
 }
 
 /* Sets config */
-
 Bajo.setConfig();
+
+/* Hooks */
+$(".login button").click( function(){
+	$(this).html('Loading ...');
+})	
