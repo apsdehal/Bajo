@@ -9,8 +9,17 @@ var Bajo = {
 	 */	
 	setConfig: function(){
 		var self = this;
-		$.getJSON('/config/config,json', function(data){
+		$.getJSON('/config/config.json', function(data){
 			self.config = data;
+		}).done( function(){
+			/**
+			 * Add the ajaxRoot to each ajax request
+			 */
+			$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+			  //Some urls may actually be complete
+			  if(options.url.substr(0,4)!='http')
+				options.url=self.config.api_root+options.url;  
+			});
 		});
 	},
 }
