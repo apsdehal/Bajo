@@ -6,4 +6,4 @@ $routes = array(
 	'/' => 'HomeController'
 	);
 
-Link::all( $routes );
+Toro::serve( $routes );
