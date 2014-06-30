@@ -9,7 +9,7 @@ var Bajo = {
 	 */	
 	setConfig: function(){
 		var self = this;
-		$.getJSON('/config/config.json', function(data){
+		$.getJSON('config/config.json', function(data){
 			self.config = data;
 		});
 	},
