@@ -61,30 +61,33 @@ var Bajo = {
 				});
 			}
 	},
+	analyzeData: function(ann){
+		// function annotation( item, property, value ){
+  //           this.item = item;
+  //           this.property = property;
+  //           this.value = value;
+  //       }
+        console.log(ann);
+        return 'hello';
+
+	},
 
 	handleAnnotations: function(ann){
 		var self = this;
-		var annotations = ann['annotations'];
+		var annotations = JSON.parse(ann['annotations']);
+		console.log(annotations);
+
 		for( var i in annotations ){
-			var returnedAnn = self.analyzeData(annotations[i]);
-			self.addAnnotationToMainView(returnedAnn);
-			self.annotations.push(returnedAnn);
+			self.analyzeData(annotations[i]);
+			// self.addAnnotationToMainView(returnedAnn);
 		}
-	}
-
-	analyzeData: function(ann){
-		function annotation( item, property, value ){
-            this.item = item;
-            this.property = property;
-            this.value = value;
-        }
-        
-	}
-
+	},
 }
 
 /* Sets config */
 Bajo.setConfig();
+
+Bajo.getAnnotations(Bajo.handleAnnotations);
 
 /* Hooks */
 $(".login button").click( function(){

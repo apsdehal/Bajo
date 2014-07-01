@@ -32,7 +32,7 @@ var ns = {
         self.pundit_VocabCategory = "http://purl.org/pundit/vocab/category";
         
         // Annotation server constants
-        self.annotationServer                   = _PUNDIT.config.annotationServerBaseURL;
+        self.annotationServer                   = "http://demo-cloud.as.thepund.it:8080/annotationserver/";
         self.annotationServerApi                = self.annotationServer + "api/open/";
         self.annotationServerApiNotebooks       = self.annotationServer + "api/open/notebooks/";
         self.annotationServerApiNotebooksGraph  = self.annotationServer + "api/open/notebooks/graph/";
