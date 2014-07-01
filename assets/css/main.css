@@ -39,3 +39,9 @@
 .oauth_status .username{
 	color: #5cb85c;
 }
+
+@media (min-width: 1000px){
+	.login{
+		left: 42%;
+	}
+}
