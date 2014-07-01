@@ -15,12 +15,10 @@ class HomeController{
 		$resp = curl_exec($curl);
 		curl_close($curl);
 		return $resp;
-		// $res = file_get_contents($url);
-		// return $res;
 	}
 
 	function post(){
-		if(isset($_POST)){
+		if(isset($_POST['ann']) && $_POST['ann'] ){
 			$_SESSION['ann'] = $_POST['ann'];
 		}
 	}

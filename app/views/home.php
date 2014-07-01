@@ -15,14 +15,12 @@
 </html>
 <script>
 function setAnnotations(){
-	Bajo.annotations = 
+	
 	<?php 
 		if(isset($_SESSION['ann']) && $_SESSION['ann'])
-			echo json_encode($_SESSION['ann']);
-		else 
-			echo false;
+			echo 'Bajo.annotations = ' . json_encode($_SESSION['ann']);
 	?>
-	if(Bajo.annotations != false)
+	if(Bajo.annotations != undefined)
 		window.clearTimeout(Bajo.annotationsTimer)
 }
 
