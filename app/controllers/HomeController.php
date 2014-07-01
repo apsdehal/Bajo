@@ -18,4 +18,10 @@ class HomeController{
 		// $res = file_get_contents($url);
 		// return $res;
 	}
+
+	function post(){
+		if(isset($_POST)){
+			$_SESSION['ann'] = $_POST['ann'];
+		}
+	}
 }

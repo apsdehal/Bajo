@@ -13,3 +13,18 @@
 <script src="assets/js/main.js"></script>
 </body>
 </html>
+<script>
+function setAnnotations(){
+	Bajo.annotations = 
+	<?php 
+		if(isset($_SESSION['ann']) && $_SESSION['ann'])
+			echo json_encode($_SESSION['ann']);
+		else 
+			echo false;
+	?>
+	if(Bajo.annotations != false)
+		window.clearTimeout(Bajo.annotationsTimer)
+}
+
+Bajo.annotationsTimer = window.setTimeout(setAnnotations, 2000);
+</script>
