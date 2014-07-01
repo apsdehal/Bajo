@@ -9,7 +9,7 @@ var Bajo = {
 	/* Variable for storing config */
 	config: config,
 
-	annotations: null,
+	annotations: [],
 	
 	/**
 	 *	Helper for setting the config variable, gets config,json and sets it to config
@@ -46,14 +46,18 @@ var Bajo = {
 	},
 
 	getAnnotations: function(cb){
+		var self = this;
 		if( notebooks != undefined )
 			for(i in notebooks){
 				$.ajax({
 					url:'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/'+notebooks[i],
 					type: 'GET',
 					dataType: 'json',
-					success: function(data){
-						cb(data);
+					success: function(ann){
+						self.setStageForAnnotations();
+						var annotations = JSON.parse(ann['annotations']);
+						var retreived = cb(annotations['items']);
+				        self.addAnnotationToMainView(retreived);
 					},
 					beforeSend: function(xhr){
 						xhr.setRequestHeader('Accept','application/json')
@@ -61,27 +65,44 @@ var Bajo = {
 				});
 			}
 	},
-	analyzeData: function(ann){
-		// function annotation( item, property, value ){
-  //           this.item = item;
-  //           this.property = property;
-  //           this.value = value;
-  //       }
-        console.log(ann);
-        return 'hello';
-
-	},
 
 	handleAnnotations: function(ann){
-		var self = this;
-		var annotations = JSON.parse(ann['annotations']);
-		console.log(annotations);
+        function annotation( item, property, value ){
+            this.item = item;
+            this.property = property;
+            this.value = value;
+        }
+        var i = 0;
+        var prop, item, value;
+        for( type in  ann){
+            if( i == 0 ){
+                value = type.split('/')[4];
+            }
+            else if( i == 2 ){
+                item = ann[type][ns.rdfs_label][0].value;
+                item = item.replace(/(\n)/g,"").trim()
+            } else if( i == 4 ){
+                prop = type.split('/')[4].split(':')[1];
+            }
+            i++;
+        }
+        console.log(item + value + prop);
+		var html = '<tr class="tableRow">'
+				 + '<td>' + item+ '</td>'
+				 + '<td>' + prop + '</td>'
+				 + '<td>' + value + '</td>'
+				 + '</tr>' 
+		$('.annotations').append(html);		 
 
-		for( var i in annotations ){
-			self.analyzeData(annotations[i]);
-			// self.addAnnotationToMainView(returnedAnn);
-		}
+    },
+	setStageForAnnotations: function(){
+		var html = '<table class="annotations">'
+				 + '<tr class="tableHeading"><th>Item</th><th>Property</th><th>Value</th></tr>'
+				 + '</table>'
+		$('body').append(html);
 	},
+	addAnnotationToMainView: function(ann){
+	}
 }
 
 /* Sets config */
