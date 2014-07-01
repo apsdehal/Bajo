@@ -3,6 +3,11 @@
 class HomeController{
 	function get(){
 		global $config;
+		$notebooks = array();
+		foreach($_GET as $key=>$value)
+			array_push($notebooks, $key);
+		session_start();
+		$_SESSION['notebooks'] = $notebooks;
 		View::make('home');
 	}
 
@@ -18,8 +23,9 @@ class HomeController{
 	}
 
 	function post(){
-		if(isset($_POST['ann']) && $_POST['ann'] ){
-			$_SESSION['ann'] = $_POST['ann'];
+		if(isset($_POST['ids']) && $_POST['ids'] ){
+			$_SESSION['ids'] = $_POST['ids'];
+			echo "yes";
 		}
 	}
 }
