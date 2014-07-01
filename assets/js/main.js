@@ -8,6 +8,8 @@ var config = {
 var Bajo = {
 	/* Variable for storing config */
 	config: config,
+
+	annotations: null,
 	
 	/**
 	 *	Helper for setting the config variable, gets config,json and sets it to config
@@ -41,6 +43,42 @@ var Bajo = {
 			// 	}
 			// } ) ;
 		});
+	},
+
+	getAnnotations: function(cb){
+		if( notebooks != undefined )
+			for(i in notebooks){
+				$.ajax({
+					url:'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/'+notebooks[i],
+					type: 'GET',
+					dataType: 'json',
+					success: function(data){
+						cb(data);
+					},
+					beforeSend: function(xhr){
+						xhr.setRequestHeader('Accept','application/json')
+					},
+				});
+			}
+	},
+
+	handleAnnotations: function(ann){
+		var self = this;
+		var annotations = ann['annotations'];
+		for( var i in annotations ){
+			var returnedAnn = self.analyzeData(annotations[i]);
+			self.addAnnotationToMainView(returnedAnn);
+			self.annotations.push(returnedAnn);
+		}
+	}
+
+	analyzeData: function(ann){
+		function annotation( item, property, value ){
+            this.item = item;
+            this.property = property;
+            this.value = value;
+        }
+        
 	}
 
 }

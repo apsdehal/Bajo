@@ -8,6 +8,7 @@
 <p class="info">You must login to Wikimedia before pushing annotations</p>
 <a title="You must login before pushing" href="//tools.wmflabs.org/widar?action=authorize" target="_blank" class="login"><button>Login to Wikimedia</button></a>
 <div class="oauth_status"></div>
+<script src="assets/js/namespace_helper.js"></script>
 <script>
 <?php
 	if(isset($_SESSION['notebooks']) && $_SESSION['notebooks']) 
