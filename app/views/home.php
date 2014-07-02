@@ -20,18 +20,3 @@
 <script src="assets/js/main.js"></script>
 </body>
 </html>
-<script>
-	for(i in notebooks){
-		$.ajax({
-			url:'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/'+notebooks[i],
-			type: 'GET',
-			dataType: 'json',
-			success: function(data){
-				console.log(data);
-			},
-			beforeSend: function(xhr){
-				xhr.setRequestHeader('Accept','application/json')
-			},
-		});
-	}
-</script>

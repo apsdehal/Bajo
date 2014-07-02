@@ -36,6 +36,8 @@ var Bajo = {
 				window.clearTimeout(self.oauthTimeout);
 			}
 			$('.oauth_status').html ( h ) ;
+			var info = $('.info').detach();
+			var anchor = $('.login').detach();
 			// $.each ( (((((d||{}).result||{}).query||{}).userinfo||{}).groups||[]) , function ( k , v ) {
 			// 	if ( v == 'bot' ) {
 			// 		max_widar_concurrent = 5 ;
@@ -88,16 +90,19 @@ var Bajo = {
         }
         console.log(item + value + prop);
 		var html = '<tr class="tableRow">'
-				 + '<td>' + item+ '</td>'
-				 + '<td>' + prop + '</td>'
-				 + '<td>' + value + '</td>'
+				 + '<td class="item">' + item+ '</td>'
+				 + '<td class="prop">' + prop + '</td>'
+				 + '<td class="value">' + value + '</td>'
+				 + '<td class="checkbox">'
+				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
+				 + '</td>' 
 				 + '</tr>' 
 		$('.annotations').append(html);		 
 
     },
 	setStageForAnnotations: function(){
 		var html = '<table class="annotations">'
-				 + '<tr class="tableHeading"><th>Item</th><th>Property</th><th>Value</th></tr>'
+				 + '<tr class="tableHeading"><th>Item</th><th>Property</th><th>Value</th><th>Select</th></tr>'
 				 + '</table>'
 		$('body').append(html);
 	},
