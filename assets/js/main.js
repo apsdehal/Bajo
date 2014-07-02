@@ -35,10 +35,10 @@ var Bajo = {
 				} ) ;
 				window.clearTimeout(self.oauthTimeout);
 				self.getAnnotations(self.handleAnnotations);
+				var info = $('.info').detach();
+				var anchor = $('.login').detach();
 			}
 			$('.oauth_status').html ( h ) ;
-			var info = $('.info').detach();
-			var anchor = $('.login').detach();
 			// $.each ( (((((d||{}).result||{}).query||{}).userinfo||{}).groups||[]) , function ( k , v ) {
 			// 	if ( v == 'bot' ) {
 			// 		max_widar_concurrent = 5 ;
