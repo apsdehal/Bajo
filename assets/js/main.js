@@ -34,6 +34,7 @@ var Bajo = {
 					h += "<div><b>You are a bot</b>, no throttling for you!</div>" ;
 				} ) ;
 				window.clearTimeout(self.oauthTimeout);
+				self.getAnnotations(self.handleAnnotations);
 			}
 			$('.oauth_status').html ( h ) ;
 			var info = $('.info').detach();
@@ -113,8 +114,6 @@ var Bajo = {
 
 /* Sets config */
 Bajo.setConfig();
-
-Bajo.getAnnotations(Bajo.handleAnnotations);
 
 /* Hooks */
 $(".login button").click( function(){
