@@ -1,3 +1,6 @@
+body{
+	background-image: url('../images/debut_light.png');
+}
 .info{
 	position: relative;
 	top: 50px;
@@ -31,7 +34,7 @@
 }
 
 .oauth_status{
-	position: relative;
+	position: absolute;
 	right: 1%;
 	top: 10px;
 	font-size: 18px;
@@ -43,19 +46,38 @@
 table.annotations{
 	position: relative;
 	margin: 0 auto;
-	width: 70%;
+	width: 80%;
 	top: 30px;
+	border: 2px solid #dadada;
 }
+
 table.annotations tr{
 	width: 100%;
-	height: 40px;
+	height: 35px;
 	vertical-align: middle;
 }
+
+table.annotations tr:nth-child(even) {
+	background-color: #eeeeee;
+}
+
 table.annotations tr th,td{
-	width: 33%;
+	width: 140px;
 	text-align: center;
 }
 
+table.annotations tr th,td:first-child{
+	width: 40%;
+}
+
+table.annotations tr th,td:last-child{
+	width: 18%;
+}
+
+table.annotations tr:first-child{
+	font-weight: bold;
+	font-size: 18px;
+}
 
 @media (min-width: 1000px){
 	.login{

@@ -102,6 +102,7 @@ var Bajo = {
     },
 	setStageForAnnotations: function(){
 		var html = '<table class="annotations">'
+				 + '<tr><td colspan="4">Your Annotations</td></tr>'
 				 + '<tr class="tableHeading"><th>Item</th><th>Property</th><th>Value</th><th>Select</th></tr>'
 				 + '</table>'
 		$('body').append(html);
