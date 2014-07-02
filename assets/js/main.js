@@ -39,12 +39,6 @@ var Bajo = {
 				var anchor = $('.login').detach();
 			}
 			$('.oauth_status').html ( h ) ;
-			// $.each ( (((((d||{}).result||{}).query||{}).userinfo||{}).groups||[]) , function ( k , v ) {
-			// 	if ( v == 'bot' ) {
-			// 		max_widar_concurrent = 5 ;
-			// 		widar_edit_delay = 1 ;
-			// 	}
-			// } ) ;
 		});
 	},
 
@@ -70,11 +64,6 @@ var Bajo = {
 	},
 
 	handleAnnotations: function(ann){
-        function annotation( item, property, value ){
-            this.item = item;
-            this.property = property;
-            this.value = value;
-        }
         var i = 0;
         var prop, item, value;
         for( type in  ann){
@@ -108,8 +97,6 @@ var Bajo = {
 				 + '</table>'
 		$('body').append(html);
 	},
-	addAnnotationToMainView: function(ann){
-	}
 }
 
 /* Sets config */
