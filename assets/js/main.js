@@ -34,7 +34,7 @@ var Bajo = {
 					h += "<div><b>You are a bot</b>, no throttling for you!</div>" ;
 				} ) ;
 				window.clearTimeout(self.oauthTimeout);
-				self.getAnnotations(self.handleAnnotations);
+				Bajo.getAnnotations(Bajo.handleAnnotations);
 				var info = $('.info').detach();
 				var anchor = $('.login').detach();
 			}
