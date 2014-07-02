@@ -32,13 +32,30 @@
 
 .oauth_status{
 	position: relative;
-	left: 37%;
-	top: 90px;
+	right: 1%;
+	top: 10px;
 	font-size: 18px;
 }
 .oauth_status .username{
 	color: #5cb85c;
 }
+
+table.annotations{
+	position: relative;
+	margin: 0 auto;
+	width: 70%;
+	top: 30px;
+}
+table.annotations tr{
+	width: 100%;
+	height: 40px;
+	vertical-align: middle;
+}
+table.annotations tr th,td{
+	width: 33%;
+	text-align: center;
+}
+
 
 @media (min-width: 1000px){
 	.login{
