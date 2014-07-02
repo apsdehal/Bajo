@@ -18,6 +18,11 @@ var Bajo = {
 		var self = this;
 		self.oauthTimeout = window.setTimeout(self.checkOauthStatus, 1000);
 	},
+
+	/**
+	 * This function checks the ouath status by regularly pinging up the Widar and then clears its timeout once the OAuth is
+	 * complete, makes changes to the html and then calls getAnnotations to handle annotations
+	 */	
 	checkOauthStatus: function () {
 		var self = this;
 		$.getJSON ( self.config.api_root , {
@@ -42,6 +47,13 @@ var Bajo = {
 		});
 	},
 
+	/**
+	 * The main player in the game this object takes notebooks, set through PHP and iterates over each
+	 * notebook to get their annotations and in turn analyze them and finally add them to the table present
+	 * in the html
+	 *
+	 * @param Function cb The callback function which is applied on the data received 
+	 */	
 	getAnnotations: function(cb){
 		var self = this;
 		if( notebooks != undefined )
@@ -50,12 +62,25 @@ var Bajo = {
 					url:'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/'+notebooks[i],
 					type: 'GET',
 					dataType: 'json',
+
+					/**
+					 * Handles the data received after making the request to pundit's open API for a information
+					 * on a particular notebook
+					 *
+					 * @param object ann Data retrieved from Pundit's API
+					 */
 					success: function(ann){
 						self.setStageForAnnotations();
 						var annotations = JSON.parse(ann['annotations']);
 						var retreived = cb(annotations['items']);
 				        self.addAnnotationToMainView(retreived);
 					},
+
+					/**
+					 * This is to specifically add headers to request before sending it to api
+					 * 
+					 * @param object xhr The object XML HTTP Request Object that is the main player
+					 */
 					beforeSend: function(xhr){
 						xhr.setRequestHeader('Accept','application/json')
 					},
@@ -63,6 +88,13 @@ var Bajo = {
 			}
 	},
 
+	/**
+	 * Handles a annotation retrieved from Pundit's Open Server
+	 * Analyzes the annotation and bring it to wikidata format and then
+	 * append it table predent in the html
+	 *
+	 * @param object ann Annotation to be analyzed as retreived from the Pundit Server
+	 */	
 	handleAnnotations: function(ann){
         var i = 0;
         var prop, item, value;
@@ -90,6 +122,11 @@ var Bajo = {
 		$('.annotations').append(html);		 
 
     },
+
+    /**
+     * Function for adding table to html dynamically after the user has been authenticated via 
+     * oauth
+     */	
 	setStageForAnnotations: function(){
 		var html = '<table class="annotations">'
 				 + '<tr><td colspan="4">Your Annotations</td></tr>'
