@@ -118,9 +118,9 @@ var Bajo = {
 				 + '<td class="checkbox">'
 				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
 				 + '</td>' 
-				 + '</tr>' 
-		$('.annotations').append(html);		 
-
+				 + '</tr>'; 
+		$('.annotations').append(html);	
+		Bajo.setPushHandler();
     },
 
     /**
@@ -132,8 +132,22 @@ var Bajo = {
 				 + '<tr><td colspan="4">Your Annotations</td></tr>'
 				 + '<tr class="tableHeading"><th>Item</th><th>Property</th><th>Value</th><th>Select</th></tr>'
 				 + '</table>'
+				 + '<button class="push">Push Selected Annotations</button>';
 		$('body').append(html);
 	},
+
+	/**
+	 * Sets click event handler on push button
+	 */	
+	setPushHandler: function(){
+		$('body').delegate('.push', 'click', function(){
+			$('input[type=checkbox]:selected').each(var i , function(i){
+				var item = $(i).find('.item').html();
+				var prop = $(i).find('.prop').html();
+				var value = $(i).find('.value').html();
+			});
+		});
+	}
 }
 
 /* Sets config */
