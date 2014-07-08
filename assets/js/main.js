@@ -2,7 +2,8 @@
 
 var config = {
 	api_root: "http://tools.wmflabs.org/widar",
-	wd_root: "//"
+	wd_root: "//www.wikidata.org/w/api.php",
+	lang: 'en'
 }
 
 /* Creating a global object */
@@ -118,7 +119,7 @@ var Bajo = {
 			html += '<td class="item-selector">' + item + '</td>';
 		}	else {
 			itemSubstr = item.substr(0,7);
-			html += '<td class="item-selector '+ itemSubStr + '"><img src="assets/images/loading.gif"/></td>';
+			html += '<td class="item-selector '+ itemSubstr + '"><img src="assets/images/loading.gif"/></td>';
 			Bajo.getRelatedItems(item);
 		}	 
 			html += '<td class="prop">' + prop + '</td>'
@@ -131,6 +132,19 @@ var Bajo = {
 		Bajo.setPushHandler();
     },
 
+    getRelatedItems: function(item){
+    	var params = {
+			action: 'wbsearchentities',
+			type:'item',
+			format: 'json',
+			language: config.lang,
+			search: item
+		};
+		$.getJSON(config.wd_root + '?callback=?', params, function(data){
+			console.log(data);
+		})
+    },
+
     /**
      * Function for adding table to html dynamically after the user has been authenticated via 
      * oauth
@@ -138,7 +152,7 @@ var Bajo = {
 	setStageForAnnotations: function(){
 		var html = '<table class="annotations">'
 				 + '<tr><td colspan="4">Your Annotations</td></tr>'
-				 + '<tr class="tableHeading"><th>Item</th><th>Property</th><th>Value</th><th>Select</th></tr>'
+				 + '<tr class="tableHeading"><th>Item</th><th>Item Selector</th><th>Property</th><th>Value</th><th>Select</th></tr>'
 				 + '</table>'
 				 + '<button class="push">Push Selected Annotations</button>';
 		$('body').append(html);
@@ -149,17 +163,22 @@ var Bajo = {
 	 */	
 	setPushHandler: function(){
 		$('body').delegate('.push', 'click', function(){
-			$('input[type=checkbox]:selected').each(var i , function(i){
+			$('input[type=checkbox]:selected').each(function(i){
 				var item = $(i).find('.item').html();
 				var prop = $(i).find('.prop').html();
 				var value = $(i).find('.value').html();
 			});
 		});
+	},
+	addAnnotationToMainView: function(ann){
+
 	}
 }
 
 /* Sets config */
 Bajo.setConfig();
+
+Bajo.getAnnotations(Bajo.handleAnnotations);
 
 /* Hooks */
 $(".login button").click( function(){
