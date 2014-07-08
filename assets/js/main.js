@@ -118,9 +118,10 @@ var Bajo = {
 		if(item[0] == 'Q'){
 			html += '<td class="item-selector"><p class="q-item">' + item + '</p></td>';
 		}	else {
-			itemSubstr = item.substr(0,7);
+			itemSubstr = item.substr(0,7).split(' ');
+			itemSubstr = itemSubstr.join('');
 			html += '<td class="item-selector '+ itemSubstr + '"><img src="assets/images/loading.gif"/></td>';
-			Bajo.getRelatedItems(item);
+			Bajo.getRelatedItems(item, itemSubstr);
 		}	 
 			html += '<td class="prop">' + prop + '</td>'
 				 + '<td class="value">' + value + '</td>'
@@ -132,7 +133,7 @@ var Bajo = {
 		Bajo.setPushHandler();
     },
 
-    getRelatedItems: function(item){
+    getRelatedItems: function(item, itemSubstr){
     	var params = {
 			action: 'wbsearchentities',
 			type:'item',
@@ -150,7 +151,7 @@ var Bajo = {
 				});
 				dropdowns += '</select></p>';
 			}
-			var itemSubstr = '.' + item.substr(0,7);
+			itemSubstr = '.' + itemSubstr;
 			$(itemSubstr).html(dropdowns);
 		});
 
@@ -162,8 +163,8 @@ var Bajo = {
      */	
 	setStageForAnnotations: function(){
 		var html = '<table class="annotations">'
-				 + '<tr><td colspan="4">Your Annotations</td></tr>'
-				 + '<tr class="tableHeading"><th>Item</th><th>Item Selector</th><th>Property</th><th>Value</th><th>Select</th></tr>'
+				 + '<tr><td colspan="5" class="annotationsHeader">Your Annotations</td></tr>'
+				 + '<tr class="tableHeading"><th class="item">Item</th><th class="item-selector">Item Selector</th><th class="prop">Property</th><th class="value">Value</th><th>Select</th></tr>'
 				 + '</table>'
 				 + '<button class="push">Push Selected Annotations</button>';
 		$('body').append(html);
