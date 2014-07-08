@@ -64,19 +64,27 @@ table.annotations tr:nth-child(even) {
 table.annotations tr th,td{
 	width: 140px;
 	text-align: center;
+	padding:0px;
 }
 
-table.annotations tr th,td:first-child{
-	width: 40%;
+table.annotations tr .item{
+	width: 28%;
+}
+table.annotations tr .item-selector{
+	width: 50%;
+}
+table.annotations tr .checkbox{
+	width: 30px;
 }
 
-table.annotations tr th,td:last-child{
-	width: 18%;
-}
 
 table.annotations tr:first-child{
 	font-weight: bold;
 	font-size: 18px;
+}
+
+.annotationsHeader{
+	padding-left: 50px;
 }
 
 @media (min-width: 1000px){
