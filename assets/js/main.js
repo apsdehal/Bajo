@@ -116,7 +116,7 @@ var Bajo = {
 		var html = '<tr class="tableRow">'
 				 + '<td class="item">' + item+ '</td>';
 		if(item[0] == 'Q'){
-			html += '<td class="item-selector">' + item + '</td>';
+			html += '<td class="item-selector"><p class="q-item">' + item + '</p></td>';
 		}	else {
 			itemSubstr = item.substr(0,7);
 			html += '<td class="item-selector '+ itemSubstr + '"><img src="assets/images/loading.gif"/></td>';
@@ -141,8 +141,19 @@ var Bajo = {
 			search: item
 		};
 		$.getJSON(config.wd_root + '?callback=?', params, function(data){
-			console.log(data);
-		})
+			if( data.search.length == 0 ){
+				var dropdowns = '<p class="non-existant">We don\'t find any suggestion for your item. <a>Want to create one?</a> </p>' 
+			} else {
+				var dropdowns = '<p class="list"><select class="item-dropdown">'
+				$.each(data.search, function(i){
+					dropdowns += '<options value="'+data.search[i].id +'">' + data.search[i].description + '</option>';
+				});
+				dropdowns += '</select></p>';
+			}
+			var itemSubstr = '.' + item.substr(0,7);
+			$(itemSubstr).html(dropdowns);
+		});
+
     },
 
     /**
