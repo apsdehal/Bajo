@@ -1,7 +1,8 @@
 /* Create a config object */
 
 var config = {
-	api_root: "http://tools.wmflabs.org/widar"
+	api_root: "http://tools.wmflabs.org/widar",
+	wd_root: "//"
 }
 
 /* Creating a global object */
@@ -112,8 +113,15 @@ var Bajo = {
         }
         console.log(item + value + prop);
 		var html = '<tr class="tableRow">'
-				 + '<td class="item">' + item+ '</td>'
-				 + '<td class="prop">' + prop + '</td>'
+				 + '<td class="item">' + item+ '</td>';
+		if(item[0] == 'Q'){
+			html += '<td class="item-selector">' + item + '</td>';
+		}	else {
+			itemSubstr = item.substr(0,7);
+			html += '<td class="item-selector '+ itemSubStr + '"><img src="assets/images/loading.gif"/></td>';
+			Bajo.getRelatedItems(item);
+		}	 
+			html += '<td class="prop">' + prop + '</td>'
 				 + '<td class="value">' + value + '</td>'
 				 + '<td class="checkbox">'
 				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
