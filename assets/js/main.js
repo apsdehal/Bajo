@@ -1,7 +1,7 @@
 /* Create a config object */
 
 var config = {
-	api_root: "http://tools.wmflabs.org/widar",
+	api_root: "http://tools.wmflabs.org/wikidata-annotation-tool",
 	wd_root: "//www.wikidata.org/w/api.php",
 	lang: 'en'
 }
@@ -27,15 +27,17 @@ var Bajo = {
 	 */	
 	checkOauthStatus: function () {
 		var self = this;
+		console.log('hello');
 		$.getJSON ( self.config.api_root , {
 			action:'get_rights',
 			botmode:1
 		}, function ( d ) {
+			console.log(d);
 			var h = '' ;
 			if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
-				h += "<div><a title='You need to authorise WiDaR to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/widar/index.php?action=authorize'>WiDaR</a><br/>not authorised.</div>" ;
+				h += "<div><a title='You need to authorise WiDaR to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WiDaR</a><br/>not authorised.</div>" ;
 			} else {
-				h += "<div>Logged into <a title='WiDaR authorised' target='_blank' href='/widar/'>WiDaR</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
+				h += "<div>Logged into <a title='WiDaR authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WiDaR</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 				$.each ( d.result.query.userinfo.groups , function ( k , v ) {
 					if ( v != 'bot' ) return ;
 					h += "<div><b>You are a bot</b>, no throttling for you!</div>" ;
@@ -190,7 +192,7 @@ var Bajo = {
 /* Sets config */
 Bajo.setConfig();
 
-Bajo.getAnnotations(Bajo.handleAnnotations);
+// Bajo.getAnnotations(Bajo.handleAnnotations);
 
 /* Hooks */
 $(".login button").click( function(){
