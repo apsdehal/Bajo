@@ -134,7 +134,22 @@ var Bajo = {
 
 	    	console.log( item + ' ' + itemNo + ' ' + propValue + ' ' + prop + ' ' + value + ' ' + valueValue);
 
-
+			html += '<tr class="tableRow">'
+					 + '<td class="item">' + item+ '</td>';
+			if(item[0] == 'Q'){
+				html += '<td class="item-selector"><p class="q-item">' + item + '</p></td>';
+			}	else {
+				itemSubstr = item.substr(0,7).split(' ');
+				itemSubstr = itemSubstr.join('');
+				html += '<td class="item-selector '+ itemSubstr + '"><img src="assets/images/loading.gif"/></td>';
+				Bajo.getRelatedItems(item, itemSubstr);
+			}	 
+			html += '<td class="prop">' + propValue + '(<span class="propNo">' + prop + '</span>)</td>'
+				 + '<td class="value">' + valueValue + '(<span class="valueNo">' + value + '</span>)</td>'
+				 + '<td class="checkbox">'
+				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
+				 + '</td>' 
+				 + '</tr>';
 		}		  
 		// var pushButton = '<button class="push">Push Selected Annotations</button>';	 
 		// $('.annotations').append(html);
