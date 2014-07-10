@@ -142,8 +142,8 @@ var Bajo = {
 				html += '<td class="item-selector '+ itemSubstr + '"><img src="assets/images/loading.gif"/></td>';
 				Bajo.getRelatedItems(item, itemSubstr);
 			}	 
-			html += '<td class="prop">' + propValue + '(<span class="propNo">' + prop + '</span>)</td>'
-				 + '<td class="value">' + valueValue + '(<span class="valueNo">' + value + '</span>)</td>'
+			html += '<td class="prop">' + propValue + ' (<span class="propNo">' + prop + '</span>)</td>'
+				 + '<td class="value">' + valueValue + ' (<span class="valueNo">' + value + '</span>)</td>'
 				 + '<td class="checkbox">'
 				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
 				 + '</td>'
@@ -189,7 +189,7 @@ var Bajo = {
 				 + '<tr><td colspan="5" class="annotationsHeader">Your Annotations</td></tr>'
 				 + '<tr class="tableHeading"><th class="item">Item</th>'
 				 + '<th class="item-selector">Item Selector</th>'
-				 + '<th class="prop">Property</th><th class="value">Value</th><th>Select</th>'
+				 + '<th class="prop">Property</th><th class="value">Value</th><th class="checkbox">Select</th>'
 				 + '<th class="resource">Resource</th>'
 				 + '</tr>'
 				 + '</table>';
