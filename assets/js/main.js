@@ -105,9 +105,8 @@ var Bajo = {
 	    	ann = JSON.parse(annotations[ann]);
 	    	info = ann['items'];
 	    	graph = ann['graph'];
-	    	console.log(ann);
 	    	var i = 0;
-	        var prop, item, value;
+	        var prop, propValue, item, itemLink, itemNo, value, valueValue, resource;
 	    	for(i in ann['metadata']){
 	    		resource =  ann['metadata'][i][ns.items.pageContext][0].value;
 	    		break;
@@ -120,7 +119,6 @@ var Bajo = {
 	    			break;
 	    		break;	
 	    	}
-	    	console.log(prop);
 
 	    	item = info[itemLink][ns.rdfs_label][0].value;
 	    	item = item.replace(/(\n)/g,"").trim()
@@ -137,7 +135,7 @@ var Bajo = {
 			html += '<tr class="tableRow">'
 					 + '<td class="item">' + item+ '</td>';
 			if(item[0] == 'Q'){
-				html += '<td class="item-selector"><p class="q-item">' + item + '</p></td>';
+				html += '<td class="item-selector"><p class="q-item">' + item + '(<span class="itemNo">' + itemNo + '</span>)</p></td>';
 			}	else {
 				itemSubstr = item.substr(0,7).split(' ');
 				itemSubstr = itemSubstr.join('');
@@ -151,10 +149,10 @@ var Bajo = {
 				 + '</td>' 
 				 + '</tr>';
 		}		  
-		// var pushButton = '<button class="push">Push Selected Annotations</button>';	 
-		// $('.annotations').append(html);
-		// $('body').append(pushButton);	
-		// Bajo.setPushHandler();
+		var pushButton = '<button class="push">Push Selected Annotations</button>';	 
+		$('.annotations').append(html);
+		$('body').append(pushButton);	
+		Bajo.setPushHandler();
     },
 
     getRelatedItems: function(item, itemSubstr){
