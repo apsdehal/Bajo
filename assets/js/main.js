@@ -100,69 +100,42 @@ var Bajo = {
 	 * @param object ann Annotation to be analyzed as retreived from the Pundit Server
 	 */	
 	handleAnnotations: function(annotations){
-		console.log(annotations);
 		var html = '';
 	    for(ann in annotations){
 	    	ann = JSON.parse(annotations[ann]);
-	    	console.log(ann);
 	    	info = ann['items'];
 	    	graph = ann['graph'];
-	    	// console.log(ann);
+	    	console.log(ann);
 	    	var i = 0;
 	        var prop, item, value;
+	    	for(i in ann['metadata']){
+	    		resource =  ann['metadata'][i][ns.items.pageContext][0].value;
+	    		break;
+	    	}
 	    	for(i in graph){
 	    		itemLink = i;
-	    		for(j in graph[item])
+	    		for(j in graph[itemLink])
 	    			prop = j;
+	    			value = graph[itemLink][prop][0].value;
 	    			break;
 	    		break;	
 	    	}
-	    	item = info[itemInfo][ns.rdfs_label][0].value;
-	    	resource = info[itemInfo][ns.items.pageContext][0].value;
-	    	propValue = info[prop][ns.rdfs_label][0].value;
-	    	prop = prop.split('/')[4].split(':').[1];
-	    	itemNo = itemInfo.split('/')[4];
-		  	console.log(item + prop);
-	    	for(i in info){
-	    		if(i.indexOf(ns.wikidataURL) != -1){
-	    			if(i != itemInfo){
-	    				value = i.split('/')[4];
-	    				valueValue = info[i][ns.rdfs_label][0].value;
-	    			}
-	    		}
-	    	}
-	    }
+	    	console.log(prop);
 
-	        // for( type in  ann){
-	        //     if( i == 0 ){
-	        //         value = type.split('/')[4];
-	        //     }
-	        //     else if( i == 2 ){
-	        //         item = ann[type][ns.rdfs_label][0].value;
-	        //         item = item.replace(/(\n)/g,"").trim()
-	        //     } else if( i == 4 ){
-	        //         prop = type.split('/')[4].split(':')[1];
-	        //     }
-	        //     i++;
-	        // }
-	 //        console.log(item + value + prop);
-		// 	html += '<tr class="tableRow">'
-		// 			 + '<td class="item">' + item+ '</td>';
-		// 	if(item[0] == 'Q'){
-		// 		html += '<td class="item-selector"><p class="q-item">' + item + '</p></td>';
-		// 	}	else {
-		// 		itemSubstr = item.substr(0,7).split(' ');
-		// 		itemSubstr = itemSubstr.join('');
-		// 		html += '<td class="item-selector '+ itemSubstr + '"><img src="assets/images/loading.gif"/></td>';
-		// 		Bajo.getRelatedItems(item, itemSubstr);
-		// 	}	 
-		// 	html += '<td class="prop">' + prop + '</td>'
-		// 		 + '<td class="value">' + value + '</td>'
-		// 		 + '<td class="checkbox">'
-		// 		 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
-		// 		 + '</td>' 
-		// 		 + '</tr>';
-		// }		  
+	    	item = info[itemLink][ns.rdfs_label][0].value;
+	    	item = item.replace(/(\n)/g,"").trim()
+	    	itemNo = itemLink.split('/')[4];
+
+	    	propValue = info[prop][ns.rdfs_label][0].value;
+	    	prop = prop.split('/')[4].split(':')[1];
+
+			valueValue = info[value][ns.rdfs_label][0].value;
+			value = value.split('/')[4];
+
+	    	console.log( item + ' ' + itemNo + ' ' + propValue + ' ' + prop + ' ' + value + ' ' + valueValue);
+
+
+		}		  
 		// var pushButton = '<button class="push">Push Selected Annotations</button>';	 
 		// $('.annotations').append(html);
 		// $('body').append(pushButton);	
