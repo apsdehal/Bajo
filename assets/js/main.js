@@ -130,12 +130,12 @@ var Bajo = {
 			valueValue = info[value][ns.rdfs_label][0].value;
 			value = value.split('/')[4];
 
-	    	console.log( item + ' ' + itemNo + ' ' + propValue + ' ' + prop + ' ' + value + ' ' + valueValue);
+	    	console.log( item[0] + ' ' + itemNo + ' ' + propValue + ' ' + prop + ' ' + value + ' ' + valueValue);
 
 			html += '<tr class="tableRow">'
 					 + '<td class="item">' + item+ '</td>';
-			if(item[0] == 'Q'){
-				html += '<td class="item-selector"><p class="q-item">' + item + '(<span class="itemNo">' + itemNo + '</span>)</p></td>';
+			if(itemNo[0] == 'Q'){
+				html += '<td class="item-selector"><p class="q-item"><span class="itemNo">' + itemNo + '</span></p></td>';
 			}	else {
 				itemSubstr = item.substr(0,7).split(' ');
 				itemSubstr = itemSubstr.join('');
