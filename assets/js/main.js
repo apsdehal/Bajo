@@ -146,7 +146,8 @@ var Bajo = {
 				 + '<td class="value">' + valueValue + '(<span class="valueNo">' + value + '</span>)</td>'
 				 + '<td class="checkbox">'
 				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
-				 + '</td>' 
+				 + '</td>'
+				 + '<td class="resource">' + resource + '</td>' 
 				 + '</tr>';
 		}		  
 		var pushButton = '<button class="push">Push Selected Annotations</button>';	 
@@ -186,7 +187,11 @@ var Bajo = {
 	setStageForAnnotations: function(){
 		var html = '<table class="annotations">'
 				 + '<tr><td colspan="5" class="annotationsHeader">Your Annotations</td></tr>'
-				 + '<tr class="tableHeading"><th class="item">Item</th><th class="item-selector">Item Selector</th><th class="prop">Property</th><th class="value">Value</th><th>Select</th></tr>'
+				 + '<tr class="tableHeading"><th class="item">Item</th>'
+				 + '<th class="item-selector">Item Selector</th>'
+				 + '<th class="prop">Property</th><th class="value">Value</th><th>Select</th>'
+				 + '<th class="resource">Resource</th>'
+				 + '</tr>'
 				 + '</table>';
 		$('body').append(html);
 	},

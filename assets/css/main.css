@@ -76,8 +76,9 @@ table.annotations tr .item-selector{
 table.annotations tr .checkbox{
 	width: 30px;
 }
-
-
+table.annotations tr .resource{
+	display:none;
+}
 table.annotations tr:first-child{
 	font-weight: bold;
 	font-size: 18px;
