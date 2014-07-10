@@ -12,6 +12,8 @@ var ns = {
         self.rdfs_resource = "http://www.w3.org/2000/01/rdf-schema#Resource";
         self.rdfs_literal = "http://www.w3.org/2000/01/rdf-schema#Literal";
         self.rdfs_seeAlso = "http://www.w3.org/2000/01/rdf-schema#seeAlso";
+
+        self.wikidataURL = 'http://www.wikidata.org/wiki/Q';
         
         // Types used to denote a webpage, a text fragment, an image, an annotation
         self.page = "http://schema.org/WebPage";
