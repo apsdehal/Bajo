@@ -46,7 +46,7 @@ body{
 table.annotations{
 	position: relative;
 	margin: 0 auto;
-	width: 80%;
+	width: 90%;
 	top: 30px;
 	border: 2px solid #dadada;
 }
@@ -71,10 +71,10 @@ table.annotations tr .item{
 	width: 24%;
 }
 table.annotations tr .item-selector{
-	width: 40%;
+	width: 25%;
 }
 table.annotations tr .checkbox{
-	width: 20px;
+	width: 30px;
 }
 table.annotations tr .resource{
 	display:none;

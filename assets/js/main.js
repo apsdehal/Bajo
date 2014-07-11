@@ -144,6 +144,7 @@ var Bajo = {
 				 + '<td class="checkbox">'
 				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
 				 + '</td>'
+				 + '<td class="status">Not pushed yet</td>'
 				 + '<td class="resource">' + resource + '</td>' 
 				 + '</tr>';
 		}		  
@@ -163,7 +164,7 @@ var Bajo = {
 		};
 		$.getJSON(config.wd_root + '?callback=?', params, function(data){
 			if( data.search.length == 0 ){
-				var dropdowns = '<p class="non-existant">We don\'t find any suggestion for your item. <a>Want to create one?</a> </p>' 
+				var dropdowns = '<p class="non-existant">No related items. <a>Want to create one?</a> </p>' 
 			} else {
 				var dropdowns = '<p class="list"><select class="item-dropdown">'
 				$.each(data.search, function(i){
@@ -187,6 +188,7 @@ var Bajo = {
 				 + '<tr class="tableHeading"><th class="item">Item</th>'
 				 + '<th class="item-selector">Item Selector</th>'
 				 + '<th class="prop">Property</th><th class="value">Value</th><th class="checkbox">Select</th>'
+				 + '<th class="status">Status</th>'
 				 + '<th class="resource">Resource</th>'
 				 + '</tr>'
 				 + '</table>';
