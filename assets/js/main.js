@@ -3,6 +3,7 @@
 var config = {
 	api_root: "http://tools.wmflabs.org/wikidata-annotation-tool",
 	wd_root: "//www.wikidata.org/w/api.php",
+	pundit_api: 'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/',
 	lang: 'en'
 }
 
@@ -35,9 +36,9 @@ var Bajo = {
 			console.log(d);
 			var h = '' ;
 			if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
-				h += "<div><a title='You need to authorise WiDaR to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WiDaR</a><br/>not authorised.</div>" ;
+				h += "<div><a title='You need to authorise WAL to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAL</a><br/>not authorised.</div>" ;
 			} else {
-				h += "<div>Logged into <a title='WiDaR authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WiDaR</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
+				h += "<div>Logged into <a title='WAL authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAL</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 				$.each ( d.result.query.userinfo.groups , function ( k , v ) {
 					if ( v != 'bot' ) return ;
 					h += "<div><b>You are a bot</b>, no throttling for you!</div>" ;
@@ -64,7 +65,7 @@ var Bajo = {
 			for(i in notebooks){
 				console.log(i);
 				$.ajax({
-					url:'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/'+notebooks[i],
+					url: config.pundit_api+notebooks[i],
 					type: 'GET',
 					dataType: 'json',
 
@@ -76,8 +77,7 @@ var Bajo = {
 					 */
 					success: function(anns){
 						self.setStageForAnnotations();
-						var retreived = cb(anns['annotations']);
-				        // self.addAnnotationToMainView(retreived);
+						cb(anns['annotations']);
 					},
 
 					/**
