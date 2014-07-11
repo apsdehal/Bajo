@@ -2,12 +2,12 @@
 
 var config = {
 	api_root: "http://tools.wmflabs.org/wikidata-annotation-tool",
-	wd_root: "//www.wikidata.org/w/api.php",
+	wd_api: "//www.wikidata.org/w/api.php",
 	pundit_api: 'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/',
 	lang: 'en'
 }
 
-var annotation = function ( item, prop, value ) {
+function annotation ( item, prop, value ) {
 	this.item = item;
 	this.prop = prop;
 	this.value = value;
@@ -168,7 +168,7 @@ var Bajo = {
 			language: config.lang,
 			search: item
 		};
-		$.getJSON(config.wd_root + '?callback=?', params, function(data){
+		$.getJSON(config.wd_api + '?callback=?', params, function(data){
 			if( data.search.length == 0 ){
 				var dropdowns = '<p class="non-existant">No related items. <a>Want to create one?</a> </p>' 
 			} else {
@@ -198,6 +198,7 @@ var Bajo = {
 				 + '<th class="resource">Resource</th>'
 				 + '</tr>'
 				 + '</table>';
+	
 		$('body').append(html);
 	},
 
@@ -208,22 +209,66 @@ var Bajo = {
 		$('body').delegate('.push', 'click', function(){
 			$('input[type=checkbox]:checked').each(function(i){
 				var parent = $(this).parent().parent();
+
 				var item = parent.find('.itemNo').html();
 				var prop = parent.find('.propNo').html();
 				var value = parent.find('.valueNo').html();
+				
 				console.log(item+ prop+value);
-				var currentAnn = annotation( item, prop, value );
+				
+				var currentAnn = new annotation( item, prop, value );
 				Bajo.checkIfClaimExists( currentAnn, parent, Bajo.pushFinally );
 			});
 		});
 	},
 
 	checkIfClaimExists: function( o, parent, cb ) {
+		var ids = o.item;
+		var prop = o.prop;
+		var target = o.value;
+
+		$.getJSON( config.wd_api + '?callback=?', {
+			action: 'wbgetentities',
+			ids: ids,
+			format: 'json',
+			props: 'claims|info'
+		}, function ( d ){
+				var claims = ((((d.entities||{})[ids]||{}).claims||{})[prop]) ;
+				
+				if ( typeof claims == 'undefined' ) {
+					console.log ( ids + " has no claims for " + prop ) ;
+					return ;
+				}
+				
+				var statement_id ;
+				
+				$.each ( (claims||[]) , function ( k , v ) {
+					var nid = (((((v||{}).mainsnak||{}).datavalue||{}).value||{})['numeric-id']) ;
+					
+					if ( typeof nid == 'undefined' ) return ;
+					nid = 'Q' + nid ;
+					
+					if ( nid != target ) return ; // Correct property, wrong target
+					statement_id = v.id ;
+					
+					return false ; // Got one
+				} ) ;
+				
+				if ( typeof statement_id == 'undefined' ) {
+					console.log ( prop + " exists for " + ids + ", but no target " + target ) ;
+					return ;
+				}
+
+				params.action = 'remove_claim' ;
+				params.id = statement_id ;
+				params.baserev = d.entities[ids].lastrevid ;
+	//			console.log ( params ) ;
+		});
 
 	},
 	pushFinally: function( o, parent ) {
 
-	}
+	},
 	addAnnotationToMainView: function( ann ) {
 
 	}
