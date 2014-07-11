@@ -34,24 +34,31 @@ var Bajo = {
 	 */	
 	checkOauthStatus: function () {
 		var self = this;
+		
 		$.getJSON ( self.config.api_root , {
 			action:'get_rights',
 			botmode:1
 		}, function ( d ) {
 			var h = '' ;
+		
 			if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
 				h += "<div><a title='You need to authorise WAL to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAL</a><br/>not authorised.</div>" ;
 			} else {
 				h += "<div>Logged into <a title='WAL authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAL</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
+		
 				$.each ( d.result.query.userinfo.groups , function ( k , v ) {
 					if ( v != 'bot' ) return ;
 					h += "<div><b>You are a bot</b>, no throttling for you!</div>" ;
 				} ) ;
+		
 				window.clearTimeout(self.oauthTimeout);
+		
 				Bajo.getAnnotations(Bajo.handleAnnotations);
+		
 				var info = $('.info').detach();
 				var anchor = $('.login').detach();
 			}
+		
 			$('.oauth_status').html ( h ) ;
 		});
 	},
@@ -65,6 +72,7 @@ var Bajo = {
 	 */	
 	getAnnotations: function(cb){
 		var self = this;
+		
 		if( notebooks != undefined )
 			for(i in notebooks){
 				$.ajax({
@@ -104,16 +112,20 @@ var Bajo = {
 	 */	
 	handleAnnotations: function(annotations){
 		var html = '';
+	    
 	    for(ann in annotations){
 	    	ann = JSON.parse(annotations[ann]);
 	    	info = ann['items'];
 	    	graph = ann['graph'];
+	    	
 	    	var i = 0;
 	        var prop, propValue, item, itemLink, itemNo, value, valueValue, resource;
+	    	
 	    	for(i in ann['metadata']){
 	    		resource =  ann['metadata'][i][ns.items.pageContext][0].value;
 	    		break;
 	    	}
+
 	    	for(i in graph){
 	    		itemLink = i;
 	    		for(j in graph[itemLink])
@@ -136,15 +148,19 @@ var Bajo = {
 	    	console.log( item[0] + ' ' + itemNo + ' ' + propValue + ' ' + prop + ' ' + value + ' ' + valueValue);
 
 			html += '<tr class="tableRow">'
-					 + '<td class="item">' + item+ '</td>';
+				 + '<td class="item">' + item + '</td>';
+		
 			if(itemNo[0] == 'Q'){
 				html += '<td class="item-selector"><p class="q-item"><span class="itemNo">' + itemNo + '</span></p></td>';
 			}	else {
 				itemSubstr = item.substr(0,7).split(' ');
 				itemSubstr = itemSubstr.join('');
+		
 				html += '<td class="item-selector '+ itemSubstr + '"><img src="assets/images/loading.gif"/></td>';
+		
 				Bajo.getRelatedItems(item, itemSubstr);
 			}	 
+		
 			html += '<td class="prop">' + propValue + ' (<span class="propNo">' + prop + '</span>)</td>'
 				 + '<td class="value">' + valueValue + ' (<span class="valueNo">' + value + '</span>)</td>'
 				 + '<td class="checkbox">'
@@ -154,9 +170,12 @@ var Bajo = {
 				 + '<td class="resource">' + resource + '</td>' 
 				 + '</tr>';
 		}		  
+		
 		var pushButton = '<button class="push">Push Selected Annotations</button>';	 
+		
 		$('.annotations').append(html);
 		$('body').append(pushButton);	
+		
 		Bajo.setPushHandler();
     },
 
@@ -168,16 +187,20 @@ var Bajo = {
 			language: config.lang,
 			search: item
 		};
+		
 		$.getJSON(config.wd_api + '?callback=?', params, function(data){
 			if( data.search.length == 0 ){
 				var dropdowns = '<p class="non-existant">No related items. <a>Want to create one?</a> </p>' 
 			} else {
 				var dropdowns = '<p class="list"><select class="item-dropdown">'
+			
 				$.each(data.search, function(i){
 					dropdowns += '<options value="'+data.search[i].id +'">' + data.search[i].description + '</option>';
 				});
+			
 				dropdowns += '</select></p>';
 			}
+
 			itemSubstr = '.' + itemSubstr;
 			$(itemSubstr).html(dropdowns);
 		});
