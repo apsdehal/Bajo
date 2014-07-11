@@ -7,6 +7,12 @@ var config = {
 	lang: 'en'
 }
 
+var annotation = function ( item, prop, value ) {
+	this.item = item;
+	this.prop = prop;
+	this.value = value;
+}
+
 /* Creating a global object */
 var Bajo = {
 	/* Variable for storing config */
@@ -198,7 +204,7 @@ var Bajo = {
 	/**
 	 * Sets click event handler on push button
 	 */	
-	setPushHandler: function(){
+	setPushHandler: function() {
 		$('body').delegate('.push', 'click', function(){
 			$('input[type=checkbox]:checked').each(function(i){
 				var parent = $(this).parent().parent();
@@ -206,10 +212,19 @@ var Bajo = {
 				var prop = parent.find('.propNo').html();
 				var value = parent.find('.valueNo').html();
 				console.log(item+ prop+value);
+				var currentAnn = annotation( item, prop, value );
+				Bajo.checkIfClaimExists( currentAnn, parent, Bajo.pushFinally );
 			});
 		});
 	},
-	addAnnotationToMainView: function(ann){
+
+	checkIfClaimExists: function( o, parent, cb ) {
+
+	},
+	pushFinally: function( o, parent ) {
+
+	}
+	addAnnotationToMainView: function( ann ) {
 
 	}
 }
