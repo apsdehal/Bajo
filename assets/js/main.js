@@ -28,12 +28,10 @@ var Bajo = {
 	 */	
 	checkOauthStatus: function () {
 		var self = this;
-		console.log('hello');
 		$.getJSON ( self.config.api_root , {
 			action:'get_rights',
 			botmode:1
 		}, function ( d ) {
-			console.log(d);
 			var h = '' ;
 			if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
 				h += "<div><a title='You need to authorise WAL to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAL</a><br/>not authorised.</div>" ;
@@ -63,7 +61,6 @@ var Bajo = {
 		var self = this;
 		if( notebooks != undefined )
 			for(i in notebooks){
-				console.log(i);
 				$.ajax({
 					url: config.pundit_api+notebooks[i],
 					type: 'GET',
@@ -201,10 +198,12 @@ var Bajo = {
 	 */	
 	setPushHandler: function(){
 		$('body').delegate('.push', 'click', function(){
-			$('input[type=checkbox]:selected').each(function(i){
-				var item = $(i).find('.item').html();
-				var prop = $(i).find('.prop').html();
-				var value = $(i).find('.value').html();
+			$('input[type=checkbox]:checked').each(function(i){
+				var parent = $(this).parent().parent();
+				var item = parent.find('.itemNo').html();
+				var prop = parent.find('.propNo').html();
+				var value = parent.find('.valueNo').html();
+				console.log(item+ prop+value);
 			});
 		});
 	},
