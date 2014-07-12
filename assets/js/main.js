@@ -232,7 +232,9 @@ var Bajo = {
 	setPushHandler: function() {
 		$('body').delegate('.push', 'click', function(){
 			$('.push').html('Pushing Now...');
-			$('input[type=checkbox]:checked').each(function(i){
+			var checkedBoxes = $('input[type=checkbox]:checked');
+			var lengthChecked = checkedBoxes.length;
+			checkedBoxes.each(function(i){
 				var parent = $(this).parent().parent();
 
 				var item = parent.find('.itemNo').html();
@@ -246,6 +248,8 @@ var Bajo = {
 				
 				var currentAnn = new annotation( item, prop, value );
 				Bajo.checkIfClaimExists( currentAnn, status, Bajo.pushFinally );
+				if ( i == lengthChecked )
+					$('.push').html('Pushed');
 			});
 		});
 	},
