@@ -247,7 +247,6 @@ var Bajo = {
 				var currentAnn = new annotation( item, prop, value );
 				Bajo.checkIfClaimExists( currentAnn, status, Bajo.pushFinally );
 			});
-			$('.push').html('Pushed');
 		});
 	},
 
@@ -305,15 +304,16 @@ var Bajo = {
 
 	pushFinally: function( o, status ) {
 		var params = {
-			action: 'set_claim',
+			action: 'set_claims',
 			ids: o.item,
 			prop: o.prop,
-			target: o.value
-		}
+			target: o.value,
+			botmode: 1
+		};
 
-		$.getJSON( config.api_root, params, function ( d ) {
+		$.getJSON ( config.api_root, params, function ( d ) {
 			console.log(d);
-			if ( d.error != 'OK' ) {
+			if ( d.error == 'OK' ) {
 				status.html('The claim has been pushed');
 			}
 		});
