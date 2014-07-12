@@ -4,6 +4,7 @@ var config = {
 	api_root: "http://tools.wmflabs.org/wikidata-annotation-tool",
 	wd_api: "//www.wikidata.org/w/api.php",
 	pundit_api: 'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/',
+	loading_gif: '<img src="assets/images/loading.gif"/>',
 	lang: 'en'
 }
 
@@ -156,7 +157,7 @@ var Bajo = {
 				itemSubstr = item.substr(0,7).split(' ');
 				itemSubstr = itemSubstr.join('');
 		
-				html += '<td class="item-selector '+ itemSubstr + '"><img src="assets/images/loading.gif"/></td>';
+				html += '<td class="item-selector ' + itemSubstr + '">' + config.loading_gif + '</td>';
 		
 				Bajo.getRelatedItems(item, itemSubstr);
 			}	 
@@ -239,13 +240,16 @@ var Bajo = {
 				
 				console.log(item+ prop+value);
 				
+				var status = parent.find('.status');
+				status.html(config.loading_gif);
+				
 				var currentAnn = new annotation( item, prop, value );
-				Bajo.checkIfClaimExists( currentAnn, parent, Bajo.pushFinally );
+				Bajo.checkIfClaimExists( currentAnn, status, Bajo.pushFinally );
 			});
 		});
 	},
 
-	checkIfClaimExists: function( o, parent, cb ) {
+	checkIfClaimExists: function( o, status, cb ) {
 		var ids = o.item;
 		var prop = o.prop;
 		var target = o.value;
@@ -259,8 +263,8 @@ var Bajo = {
 				var claims = ((((d.entities||{})[ids]||{}).claims||{})[prop]) ;
 				
 				if ( typeof claims == 'undefined' ) {
-					console.log ( ids + " has no claims for " + prop ) ;
-					cb(o, parent);
+					status.html( ids + " has no claims for " + prop ) ;
+					// cb(o, status);
 					return ;
 				}
 				
@@ -270,14 +274,15 @@ var Bajo = {
 					var nid = (((((v||{}).mainsnak||{}).datavalue||{}).value||{})['numeric-id']) ;
 					
 					if ( typeof nid == 'undefined' ) {
-						cb(o, parent);
+						console.log( ids + ' has no claims for ' + prop );
+						cb(o, status);
 						return ;
 					}
 					nid = 'Q' + nid ;
 					
 					if ( nid == target ){
-						console.log("Property with same target already exists"); 
-						return ; // Correct property, wrong target
+						status.html("Property with same target already exists"); 
+						return ; // No need to push so
 					}
 					statement_id = v.id ;
 					
@@ -285,7 +290,8 @@ var Bajo = {
 				} ) ;
 				
 				if ( typeof statement_id == 'undefined' ) {
-					console.log ( prop + " exists for " + ids + ", but no target " + target ) ;
+					console.log( prop + " exists for " + ids + ", but no target " + target ) ;
+					cb(o, status);
 					return ;
 				}
 
@@ -296,7 +302,7 @@ var Bajo = {
 
 	},
 
-	pushFinally: function( o, parent ) {
+	pushFinally: function( o, status ) {
 		var params = {
 			action: 'set_claim',
 			ids: o.item,
@@ -305,8 +311,9 @@ var Bajo = {
 		}
 
 		$.getJSON( api_root, params, function ( d ) {
+			console.log(d);
 			if ( d.error != 'OK' ) {
-				console.log('Done');
+				status.html('The claim has been pushed');
 			}
 		});
 
