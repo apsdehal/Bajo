@@ -231,6 +231,7 @@ var Bajo = {
 	 */	
 	setPushHandler: function() {
 		$('body').delegate('.push', 'click', function(){
+			$('.push').html('Pushing Now...');
 			$('input[type=checkbox]:checked').each(function(i){
 				var parent = $(this).parent().parent();
 
@@ -246,6 +247,7 @@ var Bajo = {
 				var currentAnn = new annotation( item, prop, value );
 				Bajo.checkIfClaimExists( currentAnn, status, Bajo.pushFinally );
 			});
+			$('.push').html('Pushed');
 		});
 	},
 
@@ -263,8 +265,8 @@ var Bajo = {
 				var claims = ((((d.entities||{})[ids]||{}).claims||{})[prop]) ;
 				
 				if ( typeof claims == 'undefined' ) {
-					status.html( ids + " has no claims for " + prop ) ;
-					// cb(o, status);
+					console.log( ids + " has no claims for " + prop ) ;
+					cb(o, status);
 					return ;
 				}
 				
@@ -274,7 +276,6 @@ var Bajo = {
 					var nid = (((((v||{}).mainsnak||{}).datavalue||{}).value||{})['numeric-id']) ;
 					
 					if ( typeof nid == 'undefined' ) {
-						console.log( ids + ' has no claims for ' + prop );
 						cb(o, status);
 						return ;
 					}
@@ -310,7 +311,7 @@ var Bajo = {
 			target: o.value
 		}
 
-		$.getJSON( api_root, params, function ( d ) {
+		$.getJSON( config.api_root, params, function ( d ) {
 			console.log(d);
 			if ( d.error != 'OK' ) {
 				status.html('The claim has been pushed');
