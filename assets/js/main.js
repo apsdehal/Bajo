@@ -9,10 +9,11 @@ var config = {
 	wd_base: '//www.wikidata.org/wiki/'
 }
 
-function annotation ( item, prop, value ) {
+function annotation ( item, prop, value, url ) {
 	this.item = item;
 	this.prop = prop;
 	this.value = value;
+	this.url = url;
 }
 
 /* Creating a global object */
@@ -121,10 +122,10 @@ var Bajo = {
 	    	graph = ann['graph'];
 	    	
 	    	var i = 0;
-	        var prop, propValue, item, itemLink, itemNo, value, valueValue, resource;
+	        var prop, propValue, item, itemLink, itemNo, value, valueValue, url;
 	    	
 	    	for(i in ann['metadata']){
-	    		resource =  ann['metadata'][i][ns.items.pageContext][0].value;
+	    		url =  ann['metadata'][i][ns.items.pageContext][0].value;
 	    		break;
 	    	}
 
@@ -169,7 +170,7 @@ var Bajo = {
 				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
 				 + '</td>'
 				 + '<td class="status">Not pushed yet</td>'
-				 + '<td class="resource">' + resource + '</td>' 
+				 + '<td class="resource"><span class="url">' + url + '</span></td>' 
 				 + '</tr>';
 		}		  
 		
@@ -233,21 +234,24 @@ var Bajo = {
 	setPushHandler: function() {
 		$('body').delegate('.push', 'click', function(){
 			$('.push').html('Pushing Now...');
+			
 			var checkedBoxes = $('input[type=checkbox]:checked');
 			var lengthChecked = checkedBoxes.length;
+			
 			checkedBoxes.each(function(i){
 				var parent = $(this).parent().parent();
 
 				var item = parent.find('.itemNo').html();
 				var prop = parent.find('.propNo').html();
 				var value = parent.find('.valueNo').html();
+				var url = parent.find('.url').html();
 				
 				console.log(item+ prop+value);
 				
 				var status = parent.find('.status');
 				status.html(config.loading_gif);
 				
-				var currentAnn = new annotation( item, prop, value );
+				var currentAnn = new annotation( item, prop, value, url );
 				Bajo.checkIfClaimExists( currentAnn, status, Bajo.pushFinally );
 				if ( i == lengthChecked )
 					$('.push').html('Pushed');
@@ -318,11 +322,17 @@ var Bajo = {
 
 		$.getJSON ( config.api_root, params, function ( d ) {
 			console.log(d);
+			
 			if ( d.error == 'OK' ) {
 				status.html(
 					'The <a title="Claim" href="' +  
 					self.config.wd_base + o.item + '#claims">claim</a> has been pushed'
 				);
+
+				var claimId = d.res.claim.id;
+				var revId = d.res.pageinfo.lastrevid;
+				
+				Bajo.setReference( o, claimId );
 			} else{
 				status.html('<span class="error">Failed to push</span>');
 			}
@@ -331,6 +341,25 @@ var Bajo = {
 		});
 
 	},
+
+	setReference: function( o , claimId ){
+		var params = {
+			action: 'set_reference',
+			statement: 'claimId',
+			refprop: 'P854',
+			value: o.url,
+			datatype: 'url'
+		}
+
+		$.getJSON( config.api_root, params, function (d) {
+			console.log(d);
+
+			if( d.error == 'OK' ) {
+				console.log('reference added');
+			}
+		})
+	},
+
 	addAnnotationToMainView: function( ann ) {
 	}
 }
