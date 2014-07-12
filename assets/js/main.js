@@ -214,7 +214,7 @@ var Bajo = {
      */	
 	setStageForAnnotations: function(){
 		var html = '<table class="annotations">'
-				 + '<tr><td colspan="5" class="annotationsHeader">Your Annotations</td></tr>'
+				 + '<tr><td colspan="6" class="annotationsHeader">Your Annotations</td></tr>'
 				 + '<tr class="tableHeading"><th class="item">Item</th>'
 				 + '<th class="item-selector">Item Selector</th>'
 				 + '<th class="prop">Property</th><th class="value">Value</th><th class="checkbox">Select</th>'
@@ -330,4 +330,4 @@ Bajo.setConfig();
 /* Hooks */
 $(".login button").click( function(){
 	$(this).html('Loading ...');
-})	
+});	
