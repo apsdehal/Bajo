@@ -9,11 +9,12 @@ var config = {
 	wd_base: '//www.wikidata.org/wiki/'
 }
 
-function annotation ( item, prop, value, url ) {
+function annotation ( item, prop, value, url, date ) {
 	this.item = item;
 	this.prop = prop;
 	this.value = value;
 	this.url = url;
+	this.date = date;
 }
 
 /* Creating a global object */
@@ -115,9 +116,10 @@ var Bajo = {
 	 */	
 	handleAnnotations: function(annotations){
 		var html = '';
-	    
+
 	    for(ann in annotations){
 	    	ann = JSON.parse(annotations[ann]);
+	    	console.log(ann);
 	    	info = ann['items'];
 	    	graph = ann['graph'];
 	    	
@@ -126,6 +128,7 @@ var Bajo = {
 	    	
 	    	for(i in ann['metadata']){
 	    		url =  ann['metadata'][i][ns.items.pageContext][0].value;
+	    		date = ann['metadata'][i][ns.pundit_annotationDate][0].value;
 	    		break;
 	    	}
 
@@ -170,7 +173,8 @@ var Bajo = {
 				 + '<input type="checkbox" name="annotationCheckbox" value="checked"/>'
 				 + '</td>'
 				 + '<td class="status">Not pushed yet</td>'
-				 + '<td class="resource"><span class="url">' + url + '</span></td>' 
+				 + '<td class="resource"><span class="url">' + url + '</span>'
+				 + '<span class="date_created">' + date + '<span></td>' 
 				 + '</tr>';
 		}		  
 		
@@ -245,13 +249,14 @@ var Bajo = {
 				var prop = parent.find('.propNo').html();
 				var value = parent.find('.valueNo').html();
 				var url = parent.find('.url').html();
+				var date = parent.find('.date_created').html();
 				
 				console.log(item+ prop+value);
 				
 				var status = parent.find('.status');
 				status.html(config.loading_gif);
 				
-				var currentAnn = new annotation( item, prop, value, url );
+				var currentAnn = new annotation( item, prop, value, url, date );
 				Bajo.checkIfClaimExists( currentAnn, status, Bajo.pushFinally );
 				if ( i == lengthChecked - 1 )
 					$('.push').html('Pushed');
