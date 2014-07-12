@@ -297,10 +297,21 @@ var Bajo = {
 	},
 
 	pushFinally: function( o, parent ) {
+		var params = {
+			action: 'set_claim',
+			ids: o.item,
+			prop: o.prop,
+			target: o.value
+		}
+
+		$.getJSON( api_root, params, function ( d ) {
+			if ( d.error != 'OK' ) {
+				console.log('Done');
+			}
+		});
 
 	},
 	addAnnotationToMainView: function( ann ) {
-
 	}
 }
 
