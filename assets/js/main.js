@@ -42,9 +42,9 @@ var Bajo = {
 			var h = '' ;
 		
 			if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
-				h += "<div><a title='You need to authorise WAL to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAL</a><br/>not authorised.</div>" ;
+				h += "<div><a title='You need to authorise WAF to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAF</a><br/>not authorised.</div>" ;
 			} else {
-				h += "<div>Logged into <a title='WAL authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAL</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
+				h += "<div>Logged into <a title='WAF authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAF</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 		
 				$.each ( d.result.query.userinfo.groups , function ( k , v ) {
 					if ( v != 'bot' ) return ;
