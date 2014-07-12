@@ -321,9 +321,13 @@ var Bajo = {
 			if ( d.error == 'OK' ) {
 				status.html(
 					'The <a title="Claim" href="' +  
-					self.config.wd_base + '#claims">claim has been pushed'
+					self.config.wd_base + o.item + '#claims">claim</a> has been pushed'
 				);
+			} else{
+				status.html('<span class="error">Failed to push</span>');
 			}
+		}).fail( function () {
+			status.html('<span class="error">Failed to push</span>');
 		});
 
 	},
