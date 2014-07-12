@@ -260,6 +260,7 @@ var Bajo = {
 				
 				if ( typeof claims == 'undefined' ) {
 					console.log ( ids + " has no claims for " + prop ) ;
+					cb(o, parent);
 					return ;
 				}
 				
@@ -268,10 +269,16 @@ var Bajo = {
 				$.each ( (claims||[]) , function ( k , v ) {
 					var nid = (((((v||{}).mainsnak||{}).datavalue||{}).value||{})['numeric-id']) ;
 					
-					if ( typeof nid == 'undefined' ) return ;
+					if ( typeof nid == 'undefined' ) {
+						cb(o, parent);
+						return ;
+					}
 					nid = 'Q' + nid ;
 					
-					if ( nid != target ) return ; // Correct property, wrong target
+					if ( nid == target ){
+						console.log("Property with same target already exists"); 
+						return ; // Correct property, wrong target
+					}
 					statement_id = v.id ;
 					
 					return false ; // Got one
@@ -282,13 +289,13 @@ var Bajo = {
 					return ;
 				}
 
-				params.action = 'remove_claim' ;
+				params.action = 'set_claim' ;
 				params.id = statement_id ;
 				params.baserev = d.entities[ids].lastrevid ;
-	//			console.log ( params ) ;
 		});
 
 	},
+
 	pushFinally: function( o, parent ) {
 
 	},
