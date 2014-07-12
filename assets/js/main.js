@@ -5,7 +5,8 @@ var config = {
 	wd_api: "//www.wikidata.org/w/api.php",
 	pundit_api: 'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/',
 	loading_gif: '<img src="assets/images/loading.gif"/>',
-	lang: 'en'
+	lang: 'en',
+	wd_base: '//www.wikidata.org/wiki/'
 }
 
 function annotation ( item, prop, value ) {
@@ -318,7 +319,10 @@ var Bajo = {
 		$.getJSON ( config.api_root, params, function ( d ) {
 			console.log(d);
 			if ( d.error == 'OK' ) {
-				status.html('The claim has been pushed');
+				status.html(
+					'The <a title="Claim" href="' +  
+					self.config.wd_base + '#claims">claim has been pushed'
+				);
 			}
 		});
 
