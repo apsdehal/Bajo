@@ -253,7 +253,7 @@ var Bajo = {
 				
 				var currentAnn = new annotation( item, prop, value, url );
 				Bajo.checkIfClaimExists( currentAnn, status, Bajo.pushFinally );
-				if ( i == lengthChecked )
+				if ( i == lengthChecked - 1 )
 					$('.push').html('Pushed');
 			});
 		});
@@ -331,8 +331,9 @@ var Bajo = {
 
 				var claimId = d.res.claim.id;
 				var revId = d.res.pageinfo.lastrevid;
+				console.log(claimId + revId);
 				
-				Bajo.setReference( o, claimId );
+				Bajo.setReference( o, claimId, revId );
 			} else{
 				status.html('<span class="error">Failed to push</span>');
 			}
@@ -342,13 +343,15 @@ var Bajo = {
 
 	},
 
-	setReference: function( o , claimId ){
+	setReference: function( o , claimId, revId ){
 		var params = {
 			action: 'set_reference',
-			statement: 'claimId',
+			statement: claimId,
 			refprop: 'P854',
-			value: o.url,
-			datatype: 'url'
+			value: 'http://wikitool.local',
+			datatype: 'url',
+			botmode: 1,
+			revid: revId
 		}
 
 		$.getJSON( config.api_root, params, function (d) {
@@ -366,7 +369,7 @@ var Bajo = {
 
 /* Sets config */
 Bajo.setConfig();
-
+// Bajo.setReference();
 // Bajo.getAnnotations(Bajo.handleAnnotations);
 
 /* Hooks */
