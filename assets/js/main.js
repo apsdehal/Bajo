@@ -180,7 +180,7 @@ var Bajo = {
 				 + '</td>'
 				 + '<td class="status">Not pushed yet</td>'
 				 + '<td class="resource"><span class="url">' + url + '</span>'
-				 + '<span class="date_created">' + date + '<span></td>' 
+				 + '<span class="date_created">' + date + '</span></td>' 
 				 + '</tr>';
 		}		  
 		
@@ -372,6 +372,7 @@ var Bajo = {
 			params.refprop = o.resource[i].prop;
 			params.value = o.resource[i].value;
 			params.datatype = o.resource[i].datatype;
+			console.log(params);
 			Bajo.apiAddReference( o, params );
 		}
 
