@@ -256,10 +256,12 @@ var Bajo = {
 				var value = parent.find('.valueNo').html();
 				var url = parent.find('.url').html();
 				var date = parent.find('.date_created').html();
-				date = '+0000000' + date + 'Z';
+				var yearIndex = date.indexOf('T');
+				date = date.substr(0, yearIndex+1);
+				date = '+0000000' + date + '00:00:00Z';
 
 				var resources = [];
-				resources.push( new resource( url, 'P855', 'url' ) );
+				resources.push( new resource( url, 'P854', 'url' ) );
 				resources.push( new resource( date, 'P813', 'time' ) );
 				
 				console.log(item+ prop+value);
