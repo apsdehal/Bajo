@@ -368,16 +368,18 @@ var Bajo = {
 			statement: claimId,
 			botmode: 1,
 			revid: revId
+			refprop: '',
+			value: '',
+			datatype: ''
 		}
 		for( i in o.resource ){
 			console.log(o.resource[i]);
-			params.refprop = o.resource[i].prop;
-			params.value = o.resource[i].value;
-			params.datatype = o.resource[i].datatype;
+			params.refprop += o.resource[i].prop + ',';
+			params.value += o.resource[i].value + ',';
+			params.datatype += o.resource[i].datatype;
 			console.log(params);
-			Bajo.apiAddReference( o, params );
 		}
-
+		Bajo.apiAddReference( o, params );
 	},
 
 	apiAddReference: function( o, params ){
@@ -386,9 +388,7 @@ var Bajo = {
 
 			if( d.error == 'OK' ) {
 				console.log('reference added');
-				if( params.datatype == 'time' ){
-					o.status.find('.reference_status').html('References have been added');
-				}
+				o.status.find('.reference_status').html('References have been added');
 			}
 		});
 	},
