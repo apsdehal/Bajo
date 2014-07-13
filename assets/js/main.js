@@ -9,12 +9,18 @@ var config = {
 	wd_base: '//www.wikidata.org/wiki/'
 }
 
-function annotation ( item, prop, value, url, date ) {
+function annotation ( item, prop, value, resource, status ) {
 	this.item = item;
 	this.prop = prop;
 	this.value = value;
-	this.url = url;
-	this.date = date;
+	this.resource = resource;
+	this.status = status;
+}
+
+function resource ( value, prop, datatype ){
+	this.value = value;
+	this.prop = prop;
+	this.datatype = datatype;
 }
 
 /* Creating a global object */
@@ -250,21 +256,26 @@ var Bajo = {
 				var value = parent.find('.valueNo').html();
 				var url = parent.find('.url').html();
 				var date = parent.find('.date_created').html();
+				date = '+0000000' + date + 'Z';
+
+				var resources = [];
+				resources.push( new resource( url, 'P855', 'url' ) );
+				resources.push( new resource( date, 'P813', 'time' ) );
 				
 				console.log(item+ prop+value);
 				
 				var status = parent.find('.status');
 				status.html(config.loading_gif);
 				
-				var currentAnn = new annotation( item, prop, value, url, date );
-				Bajo.checkIfClaimExists( currentAnn, status, Bajo.pushFinally );
+				var currentAnn = new annotation( item, prop, value, resources, status );
+				Bajo.checkIfClaimExists( currentAnn, Bajo.pushFinally );
 				if ( i == lengthChecked - 1 )
 					$('.push').html('Pushed');
 			});
 		});
 	},
 
-	checkIfClaimExists: function( o, status, cb ) {
+	checkIfClaimExists: function( o, cb ) {
 		var ids = o.item;
 		var prop = o.prop;
 		var target = o.value;
@@ -279,7 +290,7 @@ var Bajo = {
 				
 				if ( typeof claims == 'undefined' ) {
 					console.log( ids + " has no claims for " + prop ) ;
-					cb(o, status);
+					cb(o);
 					return ;
 				}
 				
@@ -289,13 +300,13 @@ var Bajo = {
 					var nid = (((((v||{}).mainsnak||{}).datavalue||{}).value||{})['numeric-id']) ;
 					
 					if ( typeof nid == 'undefined' ) {
-						cb(o, status);
+						cb(o);
 						return ;
 					}
 					nid = 'Q' + nid ;
 					
 					if ( nid == target ){
-						status.html("Property with same target already exists"); 
+						o.status.html("Property with same target already exists"); 
 						return ; // No need to push so
 					}
 					statement_id = v.id ;
@@ -305,7 +316,7 @@ var Bajo = {
 				
 				if ( typeof statement_id == 'undefined' ) {
 					console.log( prop + " exists for " + ids + ", but no target " + target ) ;
-					cb(o, status);
+					cb(o);
 					return ;
 				}
 
@@ -316,7 +327,7 @@ var Bajo = {
 
 	},
 
-	pushFinally: function( o, status ) {
+	pushFinally: function( o ) {
 		var params = {
 			action: 'set_claims',
 			ids: o.item,
@@ -329,9 +340,10 @@ var Bajo = {
 			console.log(d);
 			
 			if ( d.error == 'OK' ) {
-				status.html(
+				o.status.html(
 					'The <a title="Claim" href="' +  
-					self.config.wd_base + o.item + '#claims">claim</a> has been pushed'
+					self.config.wd_base + o.item + '#' + o.prop + '">claim</a> has been pushed. <span class="reference_status">'
+					+ 'Adding references now</span>'
 				);
 
 				var claimId = d.res.claim.id;
@@ -340,10 +352,10 @@ var Bajo = {
 				
 				Bajo.setReference( o, claimId, revId );
 			} else{
-				status.html('<span class="error">Failed to push</span>');
+				o.status.html('<span class="error">Failed to push</span>');
 			}
 		}).fail( function () {
-			status.html('<span class="error">Failed to push</span>');
+			o.status.html('<span class="error">Failed to push</span>');
 		});
 
 	},
@@ -352,20 +364,30 @@ var Bajo = {
 		var params = {
 			action: 'set_reference',
 			statement: claimId,
-			refprop: 'P854',
-			value: 'http://wikitool.local',
-			datatype: 'url',
 			botmode: 1,
 			revid: revId
 		}
+		for( i in o.resource ){
+			console.log(o.resource[i]);
+			params.refprop = o.resource[i].prop;
+			params.value = o.resource[i].value;
+			params.datatype = o.resource[i].datatype;
+			Bajo.apiAddReference( o, params );
+		}
 
+	},
+
+	apiAddReference: function( o, params ){
 		$.getJSON( config.api_root, params, function (d) {
 			console.log(d);
 
 			if( d.error == 'OK' ) {
 				console.log('reference added');
+				if( params.datatype == 'time' ){
+					o.status.find('.reference_status').html('References have been added');
+				}
 			}
-		})
+		});
 	},
 
 	addAnnotationToMainView: function( ann ) {
