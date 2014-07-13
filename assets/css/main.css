@@ -1,3 +1,6 @@
+* {
+	outline:none;
+}
 body{
 	background-image: url('../images/debut_light.png');
 }
