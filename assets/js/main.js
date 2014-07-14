@@ -49,7 +49,7 @@ var Bajo = {
 	 */	
 	setConfig: function(){
 		var self = this;
-		self.oauthTimeout = window.setTimeout(self.checkOauthStatus, 1000);
+		self.oauthTimeout = window.setTimeout(Bajo.checkOauthStatus, 1000);
 	},
 
 	/**
@@ -63,9 +63,13 @@ var Bajo = {
 			action:'get_rights',
 			botmode:1
 		}, function ( d ) {
+			console.log(d);
 			var h = '' ;
 		
 			if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
+				var html = '<p class="info">You must login to Wikimedia before pushing annotations</p>'
+						 + '<a title="You must login before pushing" href="//tools.wmflabs.org/wikidata-annotation-tool?action=authorize" target="_blank" class="login"><button>Login to Wikimedia</button></a>';
+				$('.main').html(html);		 
 				h += "<div><a title='You need to authorise WAF to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAF</a><br/>not authorised.</div>" ;
 			} else {
 				console.log(d);
@@ -82,6 +86,7 @@ var Bajo = {
 		
 				var info = $('.info').detach();
 				var anchor = $('.login').detach();
+				var main = $('.main').detach();
 			}
 		
 			$('.oauth_status').html ( h ) ;
@@ -237,6 +242,7 @@ var Bajo = {
 
 			itemSubstr = '.' + itemSubstr;
 			$(itemSubstr).html(dropdowns);
+			$(itemSubstr).removeClass(itemSubstr.substr(1,7));
 		});
 
     },
@@ -246,8 +252,11 @@ var Bajo = {
      * oauth
      */	
 	setStageForAnnotations: function(){
-		var html = '<table class="annotations">'
-				 + '<tr><td colspan="6" class="annotationsHeader">Your Annotations</td></tr>'
+		var html = ''
+			html += '<table class="annotations">'
+				 + '<tr><td colspan="1"></td><td colspan="3" class="annotationsHeader">Your Annotations</td>'
+				 + '<td colspan="2"><div class="selection-source"><input type="checkbox" name="source" value="source">Use selection as source</div></td>'
+				 + '</tr>'
 				 + '<tr class="tableHeading"><th class="item">Item</th>'
 				 + '<th class="item-selector">Item Selector</th>'
 				 + '<th class="prop">Property</th><th class="value">Value</th><th class="checkbox">Select</th>'

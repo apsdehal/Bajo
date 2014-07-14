@@ -5,8 +5,11 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
 <body>
-<p class="info">You must login to Wikimedia before pushing annotations</p>
-<a title="You must login before pushing" href="//tools.wmflabs.org/wikidata-annotation-tool?action=authorize" target="_blank" class="login"><button>Login to Wikimedia</button></a>
+<div class="main">
+	<div class="login-status">
+	Please Wait.. Checking Login Status
+	</div>
+</div>
 <div class="oauth_status"></div>
 <script src="assets/js/namespace_helper.js"></script>
 <script>
