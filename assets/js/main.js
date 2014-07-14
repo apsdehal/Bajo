@@ -241,8 +241,10 @@ var Bajo = {
 			}
 
 			itemSubstr = '.' + itemSubstr;
-			$(itemSubstr).html(dropdowns);
-			$(itemSubstr).removeClass(itemSubstr.substr(1,7));
+			var itemSubstrHandle = $(itemSubstr);
+			itemSubstrHandle.html(dropdowns);
+			itemSubstrHandle.removeClass(itemSubstr.substr(1,7));
+			itemSubstrHandle.siblings('.checkbox').children('input').attr('disabled', 'disabled');
 		});
 
     },
@@ -255,7 +257,8 @@ var Bajo = {
 		var html = ''
 			html += '<table class="annotations">'
 				 + '<tr><td colspan="1"></td><td colspan="3" class="annotationsHeader">Your Annotations</td>'
-				 + '<td colspan="2"><div class="selection-source"><input type="checkbox" name="source" value="source">Use selection as source</div></td>'
+				 + '<td colspan="2"><div class="selection-source">'
+				 + '<input id="selection-checkbox" type="checkbox" name="source" value="source" checked="checked">Use URLs as source</div></td>'
 				 + '</tr>'
 				 + '<tr class="tableHeading"><th class="item">Item</th>'
 				 + '<th class="item-selector">Item Selector</th>'
@@ -275,8 +278,9 @@ var Bajo = {
 		$('body').delegate('.push', 'click', function(){
 			$('.push').html('Pushing Now...');
 			
-			var checkedBoxes = $('input[type=checkbox]:checked');
+			var checkedBoxes = $('.checkbox input[type=checkbox]:checked');
 			var lengthChecked = checkedBoxes.length;
+			var isSelectionSourceChecked = $("#selection-checkbox").is(":checked");
 			
 			checkedBoxes.each(function(i){
 				var parent = $(this).parent().parent();
@@ -291,7 +295,9 @@ var Bajo = {
 				date = '+0000000' + date + '00:00:00Z';
 
 				var resources = [];
-				resources.push( new resource( url, 'P854', 'url' ) );
+
+				if(isSelectionSourceChecked)
+					resources.push( new resource( url, 'P854', 'url' ) );
 				resources.push( new resource( date, 'P813', 'time' ) );
 								
 				var status = parent.find('.status');
