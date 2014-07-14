@@ -49,39 +49,39 @@ var Bajo = {
 	 */	
 	setConfig: function(){
 		var self = this;
-		self.oauthTimeout = window.setTimeout(Bajo.checkOauthStatus, 1000);
+		Bajo.checkOauthStatus(0); //Check once, we set interval when user clicks login button
 	},
 
 	/**
 	 * This function checks the ouath status by regularly pinging up the Widar and then clears its timeout once the OAuth is
 	 * complete, makes changes to the html and then calls getAnnotations to handle annotations
 	 */	
-	checkOauthStatus: function () {
+	checkOauthStatus: function ( time ) {
 		var self = this;
 		
 		$.getJSON ( self.config.api_root , {
 			action:'get_rights',
 			botmode:1
 		}, function ( d ) {
-			console.log(d);
 			var h = '' ;
 		
 			if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
 				var html = '<p class="info">You must login to Wikimedia before pushing annotations</p>'
 						 + '<a title="You must login before pushing" href="//tools.wmflabs.org/wikidata-annotation-tool?action=authorize" target="_blank" class="login"><button>Login to Wikimedia</button></a>';
 				$('.main').html(html);		 
-				h += "<div><a title='You need to authorise WAF to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAF</a><br/>not authorised.</div>" ;
+				h += "<div><a title='You need to authorise WAF to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAF</a><br/>not authorised.</div>";
+				if( time == 1 )
+					Bajo.checkOauthStatus(1);
 			} else {
 				console.log(d);
+				// window.clearInterval(Bajo.oauthInterval);
 				h += "<div>Logged into <a title='WAF authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAF</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 		
 				$.each ( d.result.query.userinfo.groups , function ( k , v ) {
 					if ( v != 'bot' ) return ;
 					h += "<div><b>You are a bot</b>, no throttling for you!</div>" ;
 				} ) ;
-		
-				window.clearTimeout(self.oauthTimeout);
-		
+				
 				Bajo.getAnnotations(Bajo.handleAnnotations);
 		
 				var info = $('.info').detach();
@@ -443,6 +443,7 @@ var Bajo = {
 Bajo.setConfig();
 
 /* Hooks */
-$(".login button").click( function(){
+$( "body" ).delegate( ".login button", 'click', function(){
 	$(this).html('Loading ...');
+	Bajo.checkOauthStatus(1);
 });	
