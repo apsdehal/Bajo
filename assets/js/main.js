@@ -54,6 +54,7 @@ var Bajo = {
 			if ( d.error != 'OK' || typeof (d.result||{}).error != 'undefined' ) {
 				h += "<div><a title='You need to authorise WAF to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAF</a><br/>not authorised.</div>" ;
 			} else {
+				console.log(d);
 				h += "<div>Logged into <a title='WAF authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAF</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 		
 				$.each ( d.result.query.userinfo.groups , function ( k , v ) {
@@ -263,9 +264,7 @@ var Bajo = {
 				var resources = [];
 				resources.push( new resource( url, 'P854', 'url' ) );
 				resources.push( new resource( date, 'P813', 'time' ) );
-				
-				console.log(item+ prop+value);
-				
+								
 				var status = parent.find('.status');
 				status.html(config.loading_gif);
 				
@@ -288,43 +287,41 @@ var Bajo = {
 			format: 'json',
 			props: 'claims|info'
 		}, function ( d ){
-				var claims = ((((d.entities||{})[ids]||{}).claims||{})[prop]) ;
+			console.log(d);
+			var claims = ((((d.entities||{})[ids]||{}).claims||{})[prop]) ;
+			
+			if ( typeof claims == 'undefined' ) {
+				console.log( ids + " has no claims for " + prop ) ;
+				cb(o);
+				return ;
+			}
+			
+			var statement_id ;
+			
+			$.each ( (claims||[]) , function ( k , v ) {
+				var nid = (((((v||{}).mainsnak||{}).datavalue||{}).value||{})['numeric-id']) ;
 				
-				if ( typeof claims == 'undefined' ) {
-					console.log( ids + " has no claims for " + prop ) ;
+				if ( typeof nid == 'undefined' ) {
 					cb(o);
 					return ;
 				}
+				nid = 'Q' + nid ;
 				
-				var statement_id ;
-				
-				$.each ( (claims||[]) , function ( k , v ) {
-					var nid = (((((v||{}).mainsnak||{}).datavalue||{}).value||{})['numeric-id']) ;
-					
-					if ( typeof nid == 'undefined' ) {
-						cb(o);
-						return ;
-					}
-					nid = 'Q' + nid ;
-					
-					if ( nid == target ){
-						o.status.html("Property with same target already exists"); 
-						return ; // No need to push so
-					}
-					statement_id = v.id ;
-					
-					return false ; // Got one
-				} ) ;
-				
-				if ( typeof statement_id == 'undefined' ) {
-					console.log( prop + " exists for " + ids + ", but no target " + target ) ;
-					cb(o);
-					return ;
+				if ( nid == target ){
+					o.status.html("Property with same target already exists<span class='reference_status'>, now pushing references</span>"); 
+					statement_id = v.id;
+					cb(o, statement_id, d.entities[ids]['lastrevid']);
+					return ; // No need to push so
 				}
-
-				params.action = 'set_claim' ;
-				params.id = statement_id ;
-				params.baserev = d.entities[ids].lastrevid ;
+				
+				return false ; // Got one
+			} ) ;
+			
+			if ( typeof statement_id == 'undefined' ) {
+				o.status.html( prop + " exists for " + ids + ", but no target " + target + "Pushing Now" ) ;
+				cb(o);
+				return ;
+			}
 		});
 
 	},
@@ -344,7 +341,7 @@ var Bajo = {
 			if ( d.error == 'OK' ) {
 				o.status.html(
 					'The <a title="Claim" href="' +  
-					self.config.wd_base + o.item + '#' + o.prop + '">claim</a> has been pushed. <span class="reference_status">'
+					self.config.wd_base + o.item + '#' + o.prop + '" target="_blank">claim</a> has been pushed. <span class="reference_status">'
 					+ 'Adding references now</span>'
 				);
 
@@ -367,7 +364,7 @@ var Bajo = {
 			action: 'set_reference',
 			statement: claimId,
 			botmode: 1,
-			revid: revId
+			revid: revId,
 			refprop: '',
 			value: '',
 			datatype: ''
@@ -376,7 +373,7 @@ var Bajo = {
 			console.log(o.resource[i]);
 			params.refprop += o.resource[i].prop + ',';
 			params.value += o.resource[i].value + ',';
-			params.datatype += o.resource[i].datatype;
+			params.datatype += o.resource[i].datatype + ',';
 			console.log(params);
 		}
 		Bajo.apiAddReference( o, params );
