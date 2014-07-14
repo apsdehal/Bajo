@@ -9,6 +9,15 @@ var config = {
 	wd_base: '//www.wikidata.org/wiki/'
 }
 
+/**
+ * Object for storing information about annotation
+ * 
+ * @param string item Q id of the item to which claim is to be added
+ * @param string prop P id for the claim to be added
+ * @param string value Q id of the target for the claim
+ * @param object resource Object containing the info about the references
+ * @param object status Object to interact with status column of a particular annotation row
+ */	
 function annotation ( item, prop, value, resource, status ) {
 	this.item = item;
 	this.prop = prop;
@@ -17,6 +26,13 @@ function annotation ( item, prop, value, resource, status ) {
 	this.status = status;
 }
 
+/**
+ * Object containing the info about references for the particular annotations
+ *
+ * @param string value Value for the particular type of reference
+ * @param string prop P id of the property about which the reference is
+ * @param string datatype One of the special datatypes for refereneces 
+ */	
 function resource ( value, prop, datatype ){
 	this.value = value;
 	this.prop = prop;
@@ -27,8 +43,6 @@ function resource ( value, prop, datatype ){
 var Bajo = {
 	/* Variable for storing config */
 	config: config,
-
-	annotations: [],
 	
 	/**
 	 *	Helper for setting the config variable, gets config,json and sets it to config
@@ -193,6 +207,12 @@ var Bajo = {
 		Bajo.setPushHandler();
     },
 
+    /**
+     * Get related items to a fragment in case item doesn't have a Qid
+     * 
+     * @param string item Text fragment to be searched for
+	 * @param string itemSubstr class to easily access the item fragment
+     */	
     getRelatedItems: function(item, itemSubstr){
     	var params = {
 			action: 'wbsearchentities',
@@ -276,6 +296,12 @@ var Bajo = {
 		});
 	},
 
+	/**
+	 * Checks if a certain claim exists through info in o param
+	 *
+	 * @param object o Contains info on the claim to be judged
+	 * @param function cb Callback to be called upon in non-existence of claim
+	 */	
 	checkIfClaimExists: function( o, cb ) {
 		var ids = o.item;
 		var prop = o.prop;
@@ -308,9 +334,10 @@ var Bajo = {
 				nid = 'Q' + nid ;
 				
 				if ( nid == target ){
-					o.status.html("Property with same target already exists<span class='reference_status'>, now pushing references</span>"); 
+					o.status.html("Property with same target already exists<span class='reference_status'>,"
+									+ "now pushing references</span>"); 
 					statement_id = v.id;
-					cb(o, statement_id, d.entities[ids]['lastrevid']);
+					Bajo.setReference(o, statement_id, d.entities[ids]['lastrevid']); //Lets at least try to push references
 					return ; // No need to push so
 				}
 				
@@ -326,6 +353,11 @@ var Bajo = {
 
 	},
 
+	/**
+	 * Function to set claim after checking that claim exist or not
+	 *
+	 * @param object o Contains info on the claim to be pushed
+	 */	
 	pushFinally: function( o ) {
 		var params = {
 			action: 'set_claims',
@@ -379,25 +411,27 @@ var Bajo = {
 		Bajo.apiAddReference( o, params );
 	},
 
+	/**
+	 * Finally pushes the reference to Wikidata using authenticated OAuth
+	 *
+	 * @param object o The handler to much info on adding reference, prop, value, id, resource and
+	 * 					row handle
+	 * @param object params The object with info on params to getJSON request 
+	 */	
 	apiAddReference: function( o, params ){
 		$.getJSON( config.api_root, params, function (d) {
 			console.log(d);
 
-			if( d.error == 'OK' ) {
+			if ( d.error == 'OK' ) {
 				console.log('reference added');
 				o.status.find('.reference_status').html('References have been added');
 			}
 		});
 	},
-
-	addAnnotationToMainView: function( ann ) {
-	}
 }
 
 /* Sets config */
 Bajo.setConfig();
-// Bajo.setReference();
-// Bajo.getAnnotations(Bajo.handleAnnotations);
 
 /* Hooks */
 $(".login button").click( function(){
