@@ -73,7 +73,7 @@ var Bajo = {
 				if( time == 1 )
 					Bajo.checkOauthStatus(1);
 			} else {
-				console.log(d);
+				// console.log(d);
 				// window.clearInterval(Bajo.oauthInterval);
 				h += "<div>Logged into <a title='WAF authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAF</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 		
@@ -145,7 +145,7 @@ var Bajo = {
 
 	    for(ann in annotations){
 	    	ann = JSON.parse(annotations[ann]);
-	    	console.log(ann);
+	    	// console.log(ann);
 	    	info = ann['items'];
 	    	graph = ann['graph'];
 	    	
@@ -177,7 +177,7 @@ var Bajo = {
 			valueValue = info[value][ns.rdfs_label][0].value;
 			value = value.split('/')[4];
 
-	    	console.log( item[0] + ' ' + itemNo + ' ' + propValue + ' ' + prop + ' ' + value + ' ' + valueValue);
+	    	// console.log( item[0] + ' ' + itemNo + ' ' + propValue + ' ' + prop + ' ' + value + ' ' + valueValue);
 
 			html += '<tr class="tableRow">'
 				 + '<td class="item">' + item + '</td>';
@@ -328,7 +328,7 @@ var Bajo = {
 			format: 'json',
 			props: 'claims|info'
 		}, function ( d ){
-			console.log(d);
+			// console.log(d);
 			var claims = ((((d.entities||{})[ids]||{}).claims||{})[prop]) ;
 			
 			if ( typeof claims == 'undefined' ) {
@@ -349,8 +349,8 @@ var Bajo = {
 				nid = 'Q' + nid ;
 				
 				if ( nid == target ){
-					o.status.html("Property with same target already exists<span class='reference_status'>,"
-									+ "now pushing references</span>"); 
+					o.status.html("Property with same target already exists,<span class='reference_status'>"
+									+ " Now pushing references</span>"); 
 					statement_id = v.id;
 					Bajo.setReference(o, statement_id, d.entities[ids]['lastrevid']); //Lets at least try to push references
 					return ; // No need to push so
@@ -383,7 +383,7 @@ var Bajo = {
 		};
 
 		$.getJSON ( config.api_root, params, function ( d ) {
-			console.log(d);
+			// console.log(d);
 			
 			if ( d.error == 'OK' ) {
 				o.status.html(
@@ -394,7 +394,7 @@ var Bajo = {
 
 				var claimId = d.res.claim.id;
 				var revId = d.res.pageinfo.lastrevid;
-				console.log(claimId + revId);
+				// console.log(claimId + revId);
 				
 				Bajo.setReference( o, claimId, revId );
 			} else{
@@ -417,11 +417,11 @@ var Bajo = {
 			datatype: ''
 		}
 		for( i in o.resource ){
-			console.log(o.resource[i]);
+			// console.log(o.resource[i]);
 			params.refprop += o.resource[i].prop + ',';
 			params.value += o.resource[i].value + ',';
 			params.datatype += o.resource[i].datatype + ',';
-			console.log(params);
+			// console.log(params);
 		}
 		Bajo.apiAddReference( o, params );
 	},
@@ -435,11 +435,13 @@ var Bajo = {
 	 */	
 	apiAddReference: function( o, params ){
 		$.getJSON( config.api_root, params, function (d) {
-			console.log(d);
+			// console.log(d);
 
 			if ( d.error == 'OK' ) {
 				console.log('reference added');
-				o.status.find('.reference_status').html('References have been added');
+				o.status.find('.reference_status').html(' <a href="'+ config.wd_base + o.item + '#'+ o.prop + '" target="_blank">References</a> have been added');
+			} else if( d.error.error.info.indexOf(ns.reference_already) != -1 ){
+				o.status.find('.reference_status').html(' Reference already exist');
 			}
 		});
 	},

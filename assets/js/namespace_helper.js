@@ -14,6 +14,7 @@ var ns = {
         self.rdfs_seeAlso = "http://www.w3.org/2000/01/rdf-schema#seeAlso";
 
         self.wikidataURL = 'http://www.wikidata.org/wiki/Q';
+        self.reference_already = "Claim has already a reference with hash"
         
         // Types used to denote a webpage, a text fragment, an image, an annotation
         self.page = "http://schema.org/WebPage";
