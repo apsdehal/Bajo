@@ -228,10 +228,19 @@ var Bajo = {
 		};
 		
 		$.getJSON(config.wd_api + '?callback=?', params, function(data){
+			itemSubstr = '.' + itemSubstr;
+			var itemSubstrHandle = $(itemSubstr);
+			
 			if( data.search.length == 0 ){
 				var dropdowns = '<p class="non-existant">No related items. <a>Want to create one?</a> </p>' 
+				itemSubstrHandle.siblings('.checkbox').children('input').attr(
+					{
+					 'disabled': 'disabled',
+					 'title' : 'This annotation can\'t be pushed due to non-existant item'
+					}
+				);
 			} else {
-				var dropdowns = '<p class="list"><select class="item-dropdown">'
+				var dropdowns = '<p class="list"><select class="item-dropdown itemNo">'
 			
 				$.each(data.search, function(i){
 					dropdowns += '<options value="'+data.search[i].id +'">' + data.search[i].description + '</option>';
@@ -240,11 +249,9 @@ var Bajo = {
 				dropdowns += '</select></p>';
 			}
 
-			itemSubstr = '.' + itemSubstr;
-			var itemSubstrHandle = $(itemSubstr);
 			itemSubstrHandle.html(dropdowns);
 			itemSubstrHandle.removeClass(itemSubstr.substr(1,7));
-			itemSubstrHandle.siblings('.checkbox').children('input').attr('disabled', 'disabled');
+			
 		});
 
     },
