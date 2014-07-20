@@ -1,13 +1,3 @@
-/* Create a config object */
-
-var config = {
-	api_root: "http://tools.wmflabs.org/wikidata-annotation-tool",
-	wd_api: "//www.wikidata.org/w/api.php",
-	pundit_api: 'http://demo-cloud.as.thepund.it:8080/annotationserver/api/open/notebooks/',
-	loading_gif: '<img src="assets/images/loading.gif"/>',
-	lang: 'en',
-	wd_base: '//www.wikidata.org/wiki/'
-}
 
 /**
  * Object for storing information about annotation
@@ -40,14 +30,12 @@ function resource ( value, prop, datatype ){
 }
 
 /* Creating a global object */
-var Bajo = {
-	/* Variable for storing config */
-	config: config,
+Bajo = $.extend( Bajo, {
 	
 	/**
 	 *	Helper for setting the config variable, gets config,json and sets it to config
 	 */	
-	setConfig: function(){
+	init: function(){
 		var self = this;
 		Bajo.checkOauthStatus(0); //Check once, we set interval when user clicks login button
 	},
@@ -101,12 +89,11 @@ var Bajo = {
 	 * @param Function cb The callback function which is applied on the data received 
 	 */	
 	getAnnotations: function(cb){
-		var self = this;
 		
 		if( notebooks != undefined )
 			for(i in notebooks){
 				$.ajax({
-					url: config.pundit_api+notebooks[i],
+					url: self.config.pundit_api+notebooks[i],
 					type: 'GET',
 					dataType: 'json',
 
@@ -223,11 +210,11 @@ var Bajo = {
 			action: 'wbsearchentities',
 			type:'item',
 			format: 'json',
-			language: config.lang,
+			language: self.config.lang,
 			search: item
 		};
 		
-		$.getJSON(config.wd_api + '?callback=?', params, function(data){
+		$.getJSON( self.config.wd_api + '?callback=?', params, function(data){
 			itemSubstr = '.' + itemSubstr;
 			var itemSubstrHandle = $(itemSubstr);
 			
@@ -308,7 +295,7 @@ var Bajo = {
 				resources.push( new resource( date, 'P813', 'time' ) );
 								
 				var status = parent.find('.status');
-				status.html(config.loading_gif);
+				status.html( self.config.loading_gif );
 				
 				var currentAnn = new annotation( item, prop, value, resources, status );
 				Bajo.checkIfClaimExists( currentAnn, Bajo.pushFinally );
@@ -329,7 +316,7 @@ var Bajo = {
 		var prop = o.prop;
 		var target = o.value;
 
-		$.getJSON( config.wd_api + '?callback=?', {
+		$.getJSON( self.config.wd_api + '?callback=?', {
 			action: 'wbgetentities',
 			ids: ids,
 			format: 'json',
@@ -389,7 +376,7 @@ var Bajo = {
 			botmode: 1
 		};
 
-		$.getJSON ( config.api_root, params, function ( d ) {
+		$.getJSON ( self.config.api_root, params, function ( d ) {
 			// console.log(d);
 			
 			if ( d.error == 'OK' ) {
@@ -441,7 +428,7 @@ var Bajo = {
 	 * @param object params The object with info on params to getJSON request 
 	 */	
 	apiAddReference: function( o, params ){
-		$.getJSON( config.api_root, params, function (d) {
+		$.getJSON( self.config.api_root, params, function (d) {
 			// console.log(d);
 
 			if ( d.error == 'OK' ) {
@@ -452,10 +439,10 @@ var Bajo = {
 			}
 		});
 	},
-}
+});
 
-/* Sets config */
-Bajo.setConfig();
+/* Initialize the app */
+Bajo.init();
 
 /* Hooks */
 $( "body" ).delegate( ".login button", 'click', function(){
