@@ -2,6 +2,7 @@
  "name": "bajo",
  "version": "0.1.0",
  "dependencies":{
-    "qunit":""
+    "qunit":"1.14.0",
+    "blanket":"1.1.5"
  }
 }
