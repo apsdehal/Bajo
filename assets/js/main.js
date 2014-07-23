@@ -57,13 +57,13 @@ Bajo = $.extend( Bajo, {
 				var html = '<p class="info">You must login to Wikimedia before pushing annotations</p>'
 						 + '<a title="You must login before pushing" href="//tools.wmflabs.org/wikidata-annotation-tool?action=authorize" target="_blank" class="login"><button>Login to Wikimedia</button></a>';
 				$('.main').html(html);		 
-				h += "<div><a title='You need to authorise WAF to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAF</a><br/>not authorised.</div>";
+				h += "<div class='waf-status'><a title='You need to authorise WAF to edit on your behalf if you want this tool to edit Wikidata.' target='_blank' href='/wikidata-annotation-tool/index.php?action=authorize'>WAF</a><br/>not authorised.</div>";
 				if( time == 1 )
 					Bajo.checkOauthStatus(1);
 			} else {
 				// console.log(d);
 				// window.clearInterval(Bajo.oauthInterval);
-				h += "<div>Logged into <a title='WAF authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAF</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
+				h += "<div class='waf-status'>Logged into <a title='WAF authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAF</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 		
 				$.each ( d.result.query.userinfo.groups , function ( k , v ) {
 					if ( v != 'bot' ) return ;
