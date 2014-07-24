@@ -3,6 +3,7 @@
  //Load the autoload class provided by the composer
  require("vendor/autoload.php");
 
+ global $config;
  //Get the config and json decode it to get an array with the required config
  $config  = json_decode(file_get_contents("config/config.json"), true);
 

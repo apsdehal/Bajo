@@ -8,9 +8,8 @@ $routes = array(
 
 global $config;
 
-if( $config == 'development' ){
-	array_push(
-		'/test' => 'TestController'
-		);
+if( $config['environment'] == 'development' ){
+	$routes['/bajo/test'] = 'TestController';
 }
+
 Toro::serve( $routes );
