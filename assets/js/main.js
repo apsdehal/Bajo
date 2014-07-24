@@ -45,9 +45,8 @@ Bajo = $.extend( Bajo, {
 	 * complete, makes changes to the html and then calls getAnnotations to handle annotations
 	 */	
 	checkOauthStatus: function ( time ) {
-		var self = this;
 		
-		$.getJSON ( self.config.api_root , {
+		$.getJSON ( Bajo.config.api_root , {
 			action:'get_rights',
 			botmode:1
 		}, function ( d ) {
@@ -61,8 +60,6 @@ Bajo = $.extend( Bajo, {
 				if( time == 1 )
 					Bajo.checkOauthStatus(1);
 			} else {
-				// console.log(d);
-				// window.clearInterval(Bajo.oauthInterval);
 				h += "<div class='waf-status'>Logged into <a title='WAF authorised' target='_blank' href='//tools.wmflabs.org/wikidata-annotation-tool'>WAF</a> as <span class='username'>" + d.result.query.userinfo.name + "</span></div>" ;
 		
 				$.each ( d.result.query.userinfo.groups , function ( k , v ) {
@@ -89,11 +86,12 @@ Bajo = $.extend( Bajo, {
 	 * @param Function cb The callback function which is applied on the data received 
 	 */	
 	getAnnotations: function(cb){
+		var self = Bajo;
 		
-		if( notebooks != undefined )
-			for(i in notebooks){
+		if( self.notebooks != undefined )
+			for(i in self.notebooks){
 				$.ajax({
-					url: self.config.pundit_api+notebooks[i],
+					url: self.config.pundit_api + self.notebooks[i],
 					type: 'GET',
 					dataType: 'json',
 
@@ -175,7 +173,7 @@ Bajo = $.extend( Bajo, {
 				itemSubstr = item.substr(0,7).split(' ');
 				itemSubstr = itemSubstr.join('');
 		
-				html += '<td class="item-selector ' + itemSubstr + '">' + config.loading_gif + '</td>';
+				html += '<td class="item-selector ' + itemSubstr + '">' + Bajo.config.loading_gif + '</td>';
 		
 				Bajo.getRelatedItems(item, itemSubstr);
 			}	 
@@ -210,11 +208,11 @@ Bajo = $.extend( Bajo, {
 			action: 'wbsearchentities',
 			type:'item',
 			format: 'json',
-			language: self.config.lang,
+			language: Bajo.config.lang,
 			search: item
 		};
 		
-		$.getJSON( self.config.wd_api + '?callback=?', params, function(data){
+		$.getJSON( Bajo.config.wd_api + '?callback=?', params, function(data){
 			itemSubstr = '.' + itemSubstr;
 			var itemSubstrHandle = $(itemSubstr);
 			
@@ -295,7 +293,7 @@ Bajo = $.extend( Bajo, {
 				resources.push( new resource( date, 'P813', 'time' ) );
 								
 				var status = parent.find('.status');
-				status.html( self.config.loading_gif );
+				status.html( Bajo.config.loading_gif );
 				
 				var currentAnn = new annotation( item, prop, value, resources, status );
 				Bajo.checkIfClaimExists( currentAnn, Bajo.pushFinally );
@@ -316,7 +314,7 @@ Bajo = $.extend( Bajo, {
 		var prop = o.prop;
 		var target = o.value;
 
-		$.getJSON( self.config.wd_api + '?callback=?', {
+		$.getJSON( Bajo.config.wd_api + '?callback=?', {
 			action: 'wbgetentities',
 			ids: ids,
 			format: 'json',
@@ -376,13 +374,13 @@ Bajo = $.extend( Bajo, {
 			botmode: 1
 		};
 
-		$.getJSON ( self.config.api_root, params, function ( d ) {
+		$.getJSON ( Bajo.config.api_root, params, function ( d ) {
 			// console.log(d);
 			
 			if ( d.error == 'OK' ) {
 				o.status.html(
 					'The <a title="Claim" href="' +  
-					self.config.wd_base + o.item + '#' + o.prop + '" target="_blank">claim</a> has been pushed. <span class="reference_status">'
+					Bajo.config.wd_base + o.item + '#' + o.prop + '" target="_blank">claim</a> has been pushed. <span class="reference_status">'
 					+ 'Adding references now</span>'
 				);
 
@@ -428,12 +426,12 @@ Bajo = $.extend( Bajo, {
 	 * @param object params The object with info on params to getJSON request 
 	 */	
 	apiAddReference: function( o, params ){
-		$.getJSON( self.config.api_root, params, function (d) {
+		$.getJSON( Bajo.config.api_root, params, function (d) {
 			// console.log(d);
 
 			if ( d.error == 'OK' ) {
 				console.log('reference added');
-				o.status.find('.reference_status').html(' <a href="'+ config.wd_base + o.item + '#'+ o.prop + '" target="_blank">References</a> have been added');
+				o.status.find('.reference_status').html(' <a href="'+ cBajo.onfig.wd_base + o.item + '#'+ o.prop + '" target="_blank">References</a> have been added');
 			} else if( d.error.error.info.indexOf(ns.reference_already) != -1 ){
 				o.status.find('.reference_status').html(' Reference already exist');
 			}
