@@ -103,6 +103,7 @@ Bajo = $.extend( Bajo, {
 					 */
 					success: function(anns){
 						self.setStageForAnnotations();
+						consolel.log(anns['annotations']);
 						cb(anns['annotations']);
 					},
 
