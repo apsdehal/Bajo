@@ -109,7 +109,7 @@
 						 */
 						success: function(anns){
 							self.setStageForAnnotations();
-							consolel.log(anns['annotations']);
+							console.log(JSON.parse(anns['annotations'][0]));
 							cb(anns['annotations']);
 						},
 
@@ -447,4 +447,4 @@
 	});
 	
 	window.Bajo = Bajo;
-} ( jQuery, Bajo );
+} ( jQuery, Bajo ) );
