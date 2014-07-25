@@ -22,5 +22,9 @@
 ?>
 </script>
 <script src="assets/js/main.js"></script>
+<script>
+	/* Initialize the app */
+	Bajo.init();
+</script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-( function (QUnit, $, Bajo) {
+( function ( QUnit, $, Bajo ) {
 
 QUnit.module('fetch');
 
@@ -21,7 +21,9 @@ QUnit.asyncTest( 'Annotations are being fetched', 2, function (assert) {
 		};
 
 		assert.same( anns, whatShouldBe, 'We are getting correct objects');
-	}
+	};
+
+	Bajo.getAnnotations( tester );
 });
 
-} (QUnit, jQuery, Bajo) )
+} ( QUnit, jQuery, Bajo ) );
