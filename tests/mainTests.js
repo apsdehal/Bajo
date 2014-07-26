@@ -1,6 +1,6 @@
 ( function ( QUnit, $, Bajo ) {
 
-QUnit.module('fetch');
+QUnit.module( 'fetch' );
 
 //#1
 Qunit.test( 'Is WAL working', 1, function ( assert ) {
@@ -9,7 +9,7 @@ Qunit.test( 'Is WAL working', 1, function ( assert ) {
 });
 
 //#2
-QUnit.asyncTest( 'Are we able to fetch annotations?', 2, function (assert) {
+QUnit.asyncTest( 'Are we able to fetch annotations?', 2, function ( assert ) {
 	Bajo = Bajo || {};
 
 	//Set my own notebook for testing purposes
@@ -31,4 +31,28 @@ QUnit.asyncTest( 'Are we able to fetch annotations?', 2, function (assert) {
 	Bajo.getAnnotations( tester );
 });
 
+QUnit.module( 'Page Sync and Addition' );
+
+//#3
+QUnit.asyncTest( 'Are we able to add annotations', 10, function ( assert ) {
+	Bajo = Bajo || {};
+
+	//Set my own notebook for testing purposes
+	Bajo.notebooks = ['8dcf39e0'];
+
+	Bajo.getAnnotations( Bajo.handleAnnotations );
+
+	//Start assertions
+	assert.equal( $('table').length, 1, 'We have a table' );
+	assert.equal( $('.annotations').length, 1, 'We have a annotations table' );
+	assert.ok( $('.tableRow').length > 0 , 'We have rows' );
+	assert.ok( $('.item').length > 0 ,  'We have atleast one item' );
+	assert.ok( $('.prop').length > 0 ,  'We have atleast one property' );
+	assert.ok( $('.value').length > 0 ,  'We have atleast one value' );
+	assert.equal( $('.item')[3].html(), 'Pundit', 'Server is returning correct items' );
+	assert.equal( $('.propNo')[3].html(), 'P277', 'Server is returning correct property' );
+	assert.equal( $('.valueNo')[3].html(),'Q2005', 'Server is returning correct value' );
+	assert.equal( $('.non-existant a').html(), 'Want to create one?', 'Bajo.getRelatedItems is working' );
+
+});
 } ( QUnit, jQuery, Bajo ) );
