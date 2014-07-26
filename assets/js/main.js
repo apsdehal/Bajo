@@ -109,7 +109,7 @@
 						 */
 						success: function(anns){
 							self.setStageForAnnotations();
-							console.log(JSON.parse(anns['annotations'][0]));
+							// console.log(JSON.parse(anns['annotations'][0]));
 							cb(anns['annotations']);
 						},
 
