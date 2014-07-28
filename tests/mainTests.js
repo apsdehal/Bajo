@@ -63,7 +63,7 @@ QUnit.asyncTest( 'Are we able to add annotations', 10, function ( assert ) {
 });
 
 //#4
-QUnit.asyncTest( 'checkIfClaimExists is working?', 4, function ( assert ) {
+QUnit.asyncTest( 'checkIfClaimExists is working, in case of no claims?', 4, function ( assert ) {
 	Bajo = Bajo || {};
 
 	var o = {
@@ -71,7 +71,7 @@ QUnit.asyncTest( 'checkIfClaimExists is working?', 4, function ( assert ) {
 		prop: 'P100',
 		value: 'Q100'
 
-	}
+	};
 
 	var callback = function ( o ) {
 		assert.equal( o.log, 'Q2336535 has no claims for P100', 'Its working' );
@@ -79,9 +79,31 @@ QUnit.asyncTest( 'checkIfClaimExists is working?', 4, function ( assert ) {
 		assert.equal( o.prop, 'P100', 'Passed Prop is correct' );
 		assert.equal( o.value, 'Q100', 'Passed Value is correct' );
 
-		Qunit.start()
-	}
+		QUnit.start()
+	};
 
+	Bajo.checkIfClaimExists( o, callback );
+});
+
+QUnit.asyncTest( 'checkIfClaimExists is working, in case of claim exists', 1 , function ( assert ) {
+	Bajo = Bajo || {};
+
+	var o = {
+		item: 'Q2336535',
+		prop: 'P106',
+		value : 'Q11900058'
+	};
+
+	var BajoClone = Bajo;
+	
+	BajoClone.setReference = function ( o , statement_id, lastrev ) {
+		assert.equal ( o.status.html, "Property with same target already exists,<span class='reference_status'>"
+										+ " Now pushing references</span>", 'Its working' );
+	};
+
+	var callback = function ( o ) {
+		assert.ok ( 1 == 0 ); //Failing the test
+	}
 	Bajo.checkIfClaimExists( o, callback );
 });
 
