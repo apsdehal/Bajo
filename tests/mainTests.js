@@ -61,4 +61,28 @@ QUnit.asyncTest( 'Are we able to add annotations', 10, function ( assert ) {
 
 
 });
+
+//#4
+QUnit.asyncTest( 'checkIfClaimExists is working?', 4, function ( assert ) {
+	Bajo = Bajo || {};
+
+	var o = {
+		item: 'Q2336535',
+		prop: 'P100',
+		value: 'Q100'
+
+	}
+
+	var callback = function ( o ) {
+		assert.equal( o.log, 'Q2336535 has no claims for P100', 'Its working' );
+		assert.equal( o.item, 'Q2336535', 'Passed Item is correct' );
+		assert.equal( o.prop, 'P100', 'Passed Prop is correct' );
+		assert.equal( o.value, 'Q100', 'Passed Value is correct' );
+
+		Qunit.start()
+	}
+
+	Bajo.checkIfClaimExists( o, callback );
+});
+
 } ( QUnit, jQuery, Bajo ) );

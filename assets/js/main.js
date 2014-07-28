@@ -332,6 +332,7 @@
 				
 				if ( typeof claims == 'undefined' ) {
 					console.log( ids + " has no claims for " + prop ) ;
+					o.log( ids + " has no claims for " + prop )
 					cb(o);
 					return ;
 				}
