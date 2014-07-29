@@ -392,6 +392,8 @@
 						+ 'Adding references now</span>'
 					);
 
+					o.log = 'OK Done';
+
 					var claimId = d.res.claim.id;
 					var revId = d.res.pageinfo.lastrevid;
 					// console.log(claimId + revId);

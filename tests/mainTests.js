@@ -85,6 +85,7 @@ QUnit.asyncTest( 'checkIfClaimExists is working, in case of no claims?', 4, func
 	Bajo.checkIfClaimExists( o, callback );
 });
 
+//#5
 QUnit.asyncTest( 'checkIfClaimExists is working, in case of claim exists', 1 , function ( assert ) {
 	Bajo = Bajo || {};
 
@@ -107,6 +108,7 @@ QUnit.asyncTest( 'checkIfClaimExists is working, in case of claim exists', 1 , f
 	Bajo.checkIfClaimExists( o, callback );
 });
 
+//#6
 QUnit.test( 'Is setPushHandler working?', 1, function ( assert ) {
 	Bajo = Bajo || {};
 
@@ -117,6 +119,57 @@ QUnit.test( 'Is setPushHandler working?', 1, function ( assert ) {
 	if( ev && ev.click  )  {
 		ok( 1==1 , 'Its working' );
 	}
+});
+
+//#7
+QUnit.test( 'Is pushFinally working', , function ( assert ) {
+	var getJSON = $.getJSON;
+
+	$.getJSON = function ( url, params, callback ) {
+		var d = {
+			error : 'OK',
+			res : {
+				claim : {
+					id : params.id
+				},
+				pageinfo : {
+					lastrevid : params.prop
+				} 
+			}
+		};
+
+		callback( d ); 
+	};
+
+	Bajo = Bajo || {};
+
+	var o = {
+		item: 'Q2336535',
+		prop: 'P106',
+		value : 'Q11900058',
+		status : {
+			html : function ( string ) {
+				//Do nothing
+			}
+		}
+	};
+
+	var BajoClone = Bajo;
+		var o = {
+		item: 'Q2336535',
+		prop: 'P106',
+		value : 'Q11900058'
+	};
+
+	BajoClone.setReference = function ( o , claimId, revId ) {
+		assert.equal( o.log, 'OK Done', 'Its working');
+		assert.equal( claimId, 'Q2336535', 'Returns correct claimId');
+		assert.equal( revId, 'P106', 'Returns correct revid');
+	};
+
+	BajoClone.pushFinally( o );
+
+	$.getJSON = getJSON;
 });
 
 } ( QUnit, jQuery, Bajo ) );
