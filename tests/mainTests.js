@@ -107,4 +107,16 @@ QUnit.asyncTest( 'checkIfClaimExists is working, in case of claim exists', 1 , f
 	Bajo.checkIfClaimExists( o, callback );
 });
 
+QUnit.test( 'Is setPushHandler working?', 1, function ( assert ) {
+	Bajo = Bajo || {};
+
+	Bajo.setPushHandler();
+	
+	var ev = $._data( element, 'events' );
+
+	if( ev && ev.click  )  {
+		ok( 1==1 , 'Its working' );
+	}
+});
+
 } ( QUnit, jQuery, Bajo ) );
