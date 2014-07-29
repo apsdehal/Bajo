@@ -3,7 +3,7 @@
 QUnit.module( 'fetch' );
 
 //#1
-Qunit.test( 'Is WAL working', 1, function ( assert ) {
+QUnit.test( 'Is WAL working', 1, function ( assert ) {
 	var waf_status_length = $('.waf-status').length;
 	assert.ok( waf_status_length > 0, 'WAF has returned some status, i.e. WAF is working' );
 });
@@ -111,7 +111,7 @@ QUnit.test( 'Is setPushHandler working?', 1, function ( assert ) {
 	Bajo = Bajo || {};
 
 	Bajo.setPushHandler();
-	
+
 	var ev = $._data( element, 'events' );
 
 	if( ev && ev.click  )  {
