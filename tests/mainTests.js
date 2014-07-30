@@ -122,7 +122,7 @@
 	});
 
 	//#7
-	QUnit.test( 'Is pushFinally working', , function ( assert ) {
+	QUnit.test( 'Is pushFinally working', 3, function ( assert ) {
 		var getJSON = $.getJSON;
 
 		$.getJSON = function ( url, params, callback ) {
@@ -170,6 +170,34 @@
 		BajoClone.pushFinally( o );
 
 		$.getJSON = getJSON;
+	});
+
+	//#8
+	QUnit.test( 'Is setReference working?', 4, function ( assert ) {
+		function resource ( value, prop, datatype ) {
+			this.value = value;
+			this.prop = prop;
+			this.datatype = datatype;
+		};
+
+		var o = {
+			resource: [],
+			log: 'Yes'
+		};
+		
+		o.resource.push( resource( 'Q100', 'P100', 'time') );
+
+		Bajo = Bajo || {};
+		var BajoClone = Bajo;
+
+		BajoClone.apiAddReference = function ( o, params ) {
+			assert.equal( o.log, 'Yes', 'Its working' );
+			assert.equal( params.refprop, 'P100,', 'refprops are correctly passed' );
+			assert.equal( params.value, 'Q100,', 'value are correctly passed' );
+			assert.equal( params.datatype, 'time,', 'datatype are correctly passed' );
+		};
+
+		BajoClone.setReference( o, 'Q#','23');
 	});
 
 } ( QUnit, jQuery, Bajo ) );

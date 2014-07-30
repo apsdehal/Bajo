@@ -408,7 +408,7 @@
 
 		},
 
-		setReference: function( o , claimId, revId ){
+		setReference: function( o, claimId, revId ) {
 			var params = {
 				action: 'set_reference',
 				statement: claimId,
